@@ -35,8 +35,8 @@ export default function Header() {
           <nav className="hidden sm:flex space-x-6 text-[#EEE9DA]">
           {[
             { href: "/", label: "Home" },
+            { href: "/puzzles", label: "Puzzles" },
             { href: "/about", label: "About" },
-            { href: "/videos", label: "Videos" },
           ].map(({ href, label }) => (
             <Link
               key={href}
@@ -54,9 +54,9 @@ export default function Header() {
       {isOpen && (
         <div className="absolute top-full z-50 w-full bg-[#93BFCF] border-t border-[#333333] md:hidden">
           <nav className="flex flex-col text-[#333333] font-semibold max-w-5xl mx-auto">
+            <Link href="/" onClick={() => setIsOpen(false)} className="py-3 px-4 border-b border-[#333333]">Home</Link>
             <Link href="/about" onClick={() => setIsOpen(false)} className="py-3 px-4 border-b border-[#333333]">About</Link>
-            <Link href="/videos" onClick={() => setIsOpen(false)} className="py-3 px-4 border-b border-[#333333]">Videos</Link>
-            <Link href="/puzzles/easy" onClick={() => setIsOpen(false)} className="py-3 px-4 border-b border-[#333333]">Puzzles</Link>
+            <Link href="/puzzles" onClick={() => setIsOpen(false)} className="py-3 px-4 border-b border-[#333333]">Puzzles</Link>
           </nav>
         </div>
       )}
