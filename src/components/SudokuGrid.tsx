@@ -6,25 +6,26 @@ interface SudokuGridProps {
 
 export function SudokuGrid({ puzzle }: SudokuGridProps) {
   return (
-    <div className="grid grid-cols-9 grid-rows-9 gap-[1px] bg-black w-full max-w-[450px] aspect-square">
-      {puzzle.flatMap((row, rowIndex) =>
-        row.map((value, colIndex) => {
-          const isClue = value !== 0;
+    <div id="outer" className="flex justify-center">
+      <div id="inner" className="grid grid-cols-9 grid-rows-9 aspect-square max-w-[500px]">
+        {puzzle.flatMap((row, rowIndex) =>
+          row.map((value, colIndex) => {
+            const isClue = value !== 0;
 
-          return (
-            <div
-              key={`${rowIndex}-${colIndex}`}
-              className={`flex items-center justify-center text-lg font-medium
-                ${isClue ? 'bg-[#DDD] text-black' : 'bg-white text-gray-500'}
-                border border-gray-400
+            return (
+              <div
+                key={`${rowIndex}-${colIndex}`}
+                className={`flex items-center justify-center p-4 md:p-6 border-t-1 border-l-1 border-gray-500
+                bg-white md:text-3xl text-2xl font-bold text-gray-600
                 ${getBorderClasses(rowIndex, colIndex)}
-              `}
-            >
-              {isClue ? value : ""}
-            </div>
-          );
-        })
-      )}
+                `}
+              >
+                {isClue ? value : ""}
+              </div>
+            );
+          })
+        )}
+      </div>
     </div>
   );
 }
@@ -32,9 +33,12 @@ export function SudokuGrid({ puzzle }: SudokuGridProps) {
 // Helper to draw thicker borders between 3x3 boxes
 function getBorderClasses(row: number, col: number) {
   const classes = [];
-  if (col % 3 === 0) classes.push("border-l-2");
-  if (row % 3 === 0) classes.push("border-t-2");
-  if (col === 8) classes.push("border-r-2");
-  if (row === 8) classes.push("border-b-2");
+  if (col % 3 === 0) classes.push("border-l-3");
+  if (row % 3 === 0) classes.push("border-t-3");
+  if (col === 8) classes.push("border-r-3");
+  if (row === 8) classes.push("border-b-3");
+
+  if (col === 8) classes.push("border-r-1");
+  if (row === 8) classes.push("border-b-1");
   return classes.join(" ");
 }
