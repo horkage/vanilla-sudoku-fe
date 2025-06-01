@@ -2,9 +2,15 @@
 
 interface SudokuGridProps {
   puzzle: number[][];
+  selectedCell: [number, number] | null;
+  onCellClick: (row: number, col: number) => void;
 }
 
-export function SudokuGrid({ puzzle }: SudokuGridProps) {
+export function SudokuGrid({
+  puzzle,
+  selectedCell,
+  onCellClick 
+}: SudokuGridProps) {
   return (
     <div id="outer" className="flex justify-center">
       <div id="inner" className="grid grid-cols-9 grid-rows-9 aspect-square max-w-[500px]">
@@ -14,10 +20,12 @@ export function SudokuGrid({ puzzle }: SudokuGridProps) {
 
             return (
               <div
+                onClick={() => onCellClick(rowIndex, colIndex)}
                 key={`${rowIndex}-${colIndex}`}
                 className={`flex items-center justify-center p-4 md:p-6 border-t-1 border-l-1 border-gray-500
                 bg-white md:text-3xl text-2xl font-bold text-gray-600
                 ${getBorderClasses(rowIndex, colIndex)}
+                ${selectedCell?.row === rowIndex && selectedCell?.col === colIndex ? 'bg-yellow-200' : ''}
                 `}
               >
                 {isClue ? value : ""}
