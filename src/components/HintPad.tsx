@@ -14,7 +14,7 @@ export default function HintPad({ label, onInput }: HintPadProps) {
           <button
             key={`number-${i + 1}`}
             onClick={() => onInput(i)}
-            className="w-10 h-10 flex items-center justify-center bg-white border border-gray-400 rounded shadow hover:bg-gray-100 text-2xl font-bold text-[#666]"
+            className="w-12 h-12 flex items-center justify-center bg-white border border-gray-400 rounded shadow hover:bg-gray-100 text-2xl font-bold text-[#666]"
           >
             {i + 1}
           </button>
