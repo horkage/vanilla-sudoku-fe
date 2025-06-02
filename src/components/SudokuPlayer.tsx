@@ -5,7 +5,7 @@ import { SudokuGrid } from "@/components/SudokuGrid";
 import NumberPad from '@/components/NumberPad';
 import HintPad from '@/components/HintPad';
 
-export default function SudokuPlayer({ puzzle, puzzleId, clues, solution }) {
+export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtubeId }) {
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);
   const [currentGrid, setCurrentGrid] = useState<number[][]>(structuredClone(puzzle));
   const [hints, setHints] = useState<boolean[][][]>(
@@ -100,6 +100,24 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution }) {
           Check
         </button>
       </div>
+
+      {youtubeId ? (
+        <div className="mt-6 mb-4 text-center">
+          <p className="mb-2 text-sm text-gray-500">Watch me solve this puzzle:</p>
+          <iframe
+            width="560"
+            height="315"
+            src={`https://www.youtube.com/embed/${youtubeId}`}
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="mx-auto rounded-xl shadow-md"
+          ></iframe>
+        </div>
+      ) : (
+        <p className="mt-6 mb-4 text-center text-sm text-gray-400">Video of me solving this puzzle !</p>
+      )}
+
     </>
   );
 }

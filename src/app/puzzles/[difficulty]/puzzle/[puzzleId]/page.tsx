@@ -25,11 +25,18 @@ export default async function PuzzlePage({
     const clues = parse(puzzleStr);
     const solution = parse(solutionStr);
 
+    // youtube things
+    let youtubeId: string | null = null
+    const youtubePath = path.join(dir, `${puzzleId}.youtube`)
+    if (fs.existsSync(youtubePath)) {
+       youtubeId = fs.readFileSync(youtubePath, 'utf-8').trim()
+    }
+
     return (
       <main className="bg-[#EEE9DA] flex justify-center">
         <div className="w-[95%] md:w-[75%] mt-4">
           <h1 className="text-2xl font-semibold text-[#333333] mb-2 text-center">{difficulty.charAt(0).toUpperCase()}{difficulty.slice(1)} Puzzle: {puzzleId}</h1>
-          <SudokuPlayer puzzle={puzzle} puzzleId={puzzleId} clues={clues} solution={solution} />
+          <SudokuPlayer puzzle={puzzle} puzzleId={puzzleId} clues={clues} solution={solution} youtubeId={youtubeId} />
         </div>
       </main>
     );
