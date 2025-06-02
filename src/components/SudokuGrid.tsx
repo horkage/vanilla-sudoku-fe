@@ -34,7 +34,7 @@ export function SudokuGrid({
                 className={`relative flex items-center justify-center p-5 md:p-6 border-t-1 border-l-1 border-gray-500
                 bg-white md:text-3xl text-2xl font-bold text-gray-600 aspect-square bg-white
                   ${getBorderClasses(rowIndex, colIndex)}
-                  ${selectedCell?.row === rowIndex && selectedCell?.col === colIndex ? 'bg-yellow-200' : ''}
+                  ${selectedCell?.row === rowIndex && selectedCell?.col === colIndex ? 'bg-selected' : ''}
                 `}
               >
                 {/* Hints grid */}
