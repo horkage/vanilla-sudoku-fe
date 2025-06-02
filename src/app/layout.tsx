@@ -6,6 +6,9 @@ import Header from '@/components/Header';
 export const metadata: Metadata = {
   title: 'Vanilla Sudoku',
   description: 'Interactive, human-style Sudoku solving with visual walkthroughs.',
+  icons: {
+    icon: '/favicon.ico',
+  },
 };
 
 export default function RootLayout({
