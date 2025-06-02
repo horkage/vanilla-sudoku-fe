@@ -2,6 +2,8 @@
 
 interface SudokuGridProps {
   puzzle: number[][];
+  clues: number[][];
+  hints: boolean[][][];
   selectedCell: [number, number] | null;
   onCellClick: (row: number, col: number) => void;
 }
@@ -9,12 +11,13 @@ interface SudokuGridProps {
 export function SudokuGrid({
   puzzle,
   hints,
+  clues,
   selectedCell,
   onCellClick 
 }: SudokuGridProps) {
   return (
     <div id="outer" className="flex justify-center">
-      <div id="inner" className="grid grid-cols-9 grid-rows-9 aspect-square w-full max-w-[400px] sm:max-w-[550px] md:max-w-[550px] lg:max-w-[550px]">
+      <div id="inner" className="grid grid-cols-9 grid-rows-9 aspect-square w-full max-w-[400px] sm:max-w-[525px] md:max-w-[525px] lg:max-w-[525px]">
         {puzzle.flatMap((row, rowIndex) =>
           row.map((value, colIndex) => {
             const isClue = value !== 0;
@@ -42,11 +45,13 @@ export function SudokuGrid({
                 )}
 
                 {/* Main number (if filled) */}
-                {isClue || puzzle[rowIndex][colIndex] !== 0 ? (
-                  <div className="absolute flex items-center justify-center text-2xl md:text-3xl font-bold text-gray-700 pointer-events-none">
+                {puzzle[rowIndex][colIndex] !== 0 && (
+                  <div className={`absolute flex items-center justify-center text-2xl md:text-3xl font-bold
+                    ${clues[rowIndex][colIndex] !== 0 ? 'text-gray-700' : 'text-[#6096B4]'}`}>
                     {puzzle[rowIndex][colIndex]}
                   </div>
-                ) : null}
+                )}
+
               </div>
 
             );
