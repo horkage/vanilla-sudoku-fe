@@ -6,6 +6,7 @@ interface SudokuGridProps {
   hints: boolean[][][];
   selectedCell: [number, number] | null;
   onCellClick: (row: number, col: number) => void;
+  incorrectCells: boolean[][];
 }
 
 export function SudokuGrid({
@@ -13,7 +14,8 @@ export function SudokuGrid({
   hints,
   clues,
   selectedCell,
-  onCellClick 
+  onCellClick,
+  incorrectCells
 }: SudokuGridProps) {
   return (
     <div id="outer" className="flex justify-center">
@@ -21,6 +23,8 @@ export function SudokuGrid({
         {puzzle.flatMap((row, rowIndex) =>
           row.map((value, colIndex) => {
             const isClue = value !== 0;
+
+// console.log(incorrectCells);
 
             return (
 
@@ -46,8 +50,11 @@ export function SudokuGrid({
 
                 {/* Main number (if filled) */}
                 {puzzle[rowIndex][colIndex] !== 0 && (
-                  <div className={`absolute flex items-center justify-center text-2xl md:text-3xl font-bold
-                    ${clues[rowIndex][colIndex] !== 0 ? 'text-gray-700' : 'text-[#6096B4]'}`}>
+                  <div className={`
+                    absolute flex items-center justify-center text-2xl md:text-3xl font-bold
+                    ${clues[rowIndex][colIndex] !== 0 ? 'text-gray-700' : 'text-[#6096B4]'}
+                    ${incorrectCells?.[rowIndex]?.[colIndex] ? 'text-red-800' : ''}
+                    `}>
                     {puzzle[rowIndex][colIndex]}
                   </div>
                 )}
