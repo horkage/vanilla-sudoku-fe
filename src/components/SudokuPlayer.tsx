@@ -26,7 +26,11 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution }) {
     const { row, col } = selectedCell;
     if (mode === "number") {
       const newGrid = structuredClone(currentGrid);
-      newGrid[row][col] = num;
+      if (newGrid[row][col] === num) {
+        newGrid[row][col] = '';
+      } else {
+        newGrid[row][col] = num;
+      }
       setCurrentGrid(newGrid);
     } else {
       setHints(prev => {
