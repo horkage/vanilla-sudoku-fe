@@ -27,7 +27,7 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
     if (mode === "number") {
       const newGrid = structuredClone(currentGrid);
       if (newGrid[row][col] === num) {
-        newGrid[row][col] = '';
+        newGrid[row][col] = 0;
       } else {
         newGrid[row][col] = num;
       }
