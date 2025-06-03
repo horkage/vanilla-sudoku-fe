@@ -69,54 +69,56 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
 
   return (
     <>
-      <SudokuGrid
-        puzzle={currentGrid}
-        clues={clues}
-        selectedCell={selectedCell}
-        onCellClick={handleCellClick}
-        hints={hints}
-        incorrectCells={incorrectCells}
-      />
-      <div className="flex justify-center gap-8 mt-2">
-        <div className="text-center">
-          <HintPad label="Hints" onInput={(num) => handleNumberInput(num, 'hints')} />
-        </div>
-        <div className="text-center">
-          <NumberPad label="Numbers" onInput={(num) => handleNumberInput(num, 'number')} />
-        </div>
-      </div>
+      <div className="flex flex-col lg:flex-row gap-2 items-start">
+        <div className="flex-1">
+          <SudokuGrid
+            puzzle={currentGrid}
+            clues={clues}
+            selectedCell={selectedCell}
+            onCellClick={handleCellClick}
+            hints={hints}
+            incorrectCells={incorrectCells}
+          />
+          <div className="flex justify-center gap-8 mt-2">
+            <div className="text-center">
+              <HintPad label="Hints" onInput={(num) => handleNumberInput(num, 'hints')} />
+            </div>
+            <div className="text-center">
+              <NumberPad label="Numbers" onInput={(num) => handleNumberInput(num, 'number')} />
+            </div>
+          </div>
 
-      <div className="flex justify-center gap-8 mt-4 mb-4">
-        <button
-          onClick={handleReset}
-          className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
-        >
-          Reset
-        </button>
-        <button
-          onClick={handleCheck}
-          className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
-        >
-          Check
-        </button>
-      </div>
+          <div className="flex justify-center gap-8 mt-4 mb-4">
+            <button
+              onClick={handleReset}
+              className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
+            >
+              Reset
+            </button>
+            <button
+              onClick={handleCheck}
+              className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
+            >
+              Check
+            </button>
+          </div>
+        </div>
 
       {youtubeId ? (
-        <div className="mt-6 mb-4 text-center">
-          <p className="mb-2 text-sm text-gray-500">Watch me solve this puzzle:</p>
+        <div className="aspect-video w-full md:w-[40%] rounded-xl shadow-md overflow-hidden text-center mb-4">
           <iframe
-            width="560"
-            height="315"
             src={`https://www.youtube.com/embed/${youtubeId}`}
             title="YouTube video player"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
-            className="mx-auto rounded-xl shadow-md"
+            className="mx-auto rounded-xl shadow-md w-full h-full"
           ></iframe>
         </div>
       ) : (
-        <p className="mt-6 mb-4 text-center text-sm text-gray-400">Video of me solving this puzzle !</p>
+        <p></p>
       )}
+
+      </div>
 
     </>
   );
