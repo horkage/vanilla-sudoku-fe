@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { SudokuGrid } from "@/components/SudokuGrid";
 import NumberPad from '@/components/NumberPad';
 import HintPad from '@/components/HintPad';
+import { HelpCircle } from 'lucide-react';
 
 export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtubeId }) {
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);
@@ -19,6 +20,7 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showCheckDialog, setShowCheckDialog] = useState(false);
   const [showSolvedDialog, setShowSolvedDialog] = useState(false);
+  const [showHelpDialog, setShowHelpDialog] = useState(false);
 
   function handleCellClick(row: number, col: number) {
     setSelectedCell({ row, col });
@@ -87,6 +89,13 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
   return (
     <>
       <div className="flex flex-col lg:flex-row gap-2 items-start">
+      <button
+        onClick={() => setShowHelpDialog(true)}
+        className="fixed top-22 left-2 z-50"
+        aria-label="Help"
+      >
+        <HelpCircle className="w-6 h-6 text-gray-600 hover:text-[#6096B4]" />
+      </button>
 
         {/* confirm dialog */}
         {showResetConfirm && (
@@ -145,6 +154,37 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
           </div>
         )}
 
+        {/* help dialog */}
+        {showHelpDialog && (
+          <div className="fixed inset-0 bg-[rgba(0,0,0,0.4)] flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-xl shadow-lg text-center max-w-sm w-full">
+              <p className="mb-4 text-gray-800 font-semibold">
+                How to play
+              </p>
+              <p className="mb-4 text-gray-800 text-left">
+                Place numbers within the puzzle grid so that each number in every box, row, and column are all unique.
+              </p>
+              <p className="mb-4 text-gray-800 text-left">
+                Poke a cell, and then poke either a hint (lower left) or a number (lower right). Hints and numbers can be undone by poking the same number again on the selected cell.
+              </p>
+              <p className="mb-4 text-gray-800 text-left">
+                You can see if your numbers are correct at any time using the Check button below. Clear the entire grid with the Reset button if you wish to start over.
+              </p>
+              <p className="mb-4 text-gray-800 text-left">
+                You could also use the Check button to step through each number until it turns blue if you happen to get stuck or are new to sudoku.
+              </p>
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={() => setShowHelpDialog(false)}
+                  className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
+                >
+                  Ok
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="flex-1">
           <SudokuGrid
             puzzle={currentGrid}
@@ -164,13 +204,12 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
           </div>
 
           <div className="flex justify-center gap-8 mt-4 mb-4">
-              <button
-                onClick={() => setShowResetConfirm(true)}
-                className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
-              >
-                Reset
-              </button>
-
+            <button
+              onClick={() => setShowResetConfirm(true)}
+              className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
+            >
+              Reset
+            </button>
 
             <button
               onClick={handleCheck}
