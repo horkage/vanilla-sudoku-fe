@@ -17,6 +17,8 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
     Array(9).fill(null).map(() => Array(9).fill(false))
   );
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [showCheckDialog, setShowCheckDialog] = useState(false);
+  const [showSolvedDialog, setShowSolvedDialog] = useState(false);
 
   function handleCellClick(row: number, col: number) {
     setSelectedCell({ row, col });
@@ -69,6 +71,17 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
       })
     );
     setIncorrectCells(newIncorrectCells);
+    // const hasIncorrect = newIncorrectCells.some(row => row.some(cell => cell));
+
+    const isSolved = currentGrid.every((row, rowIndex) =>
+      row.every((value, colIndex) => value === solution[rowIndex][colIndex])
+    );
+
+    if (isSolved) {
+      setShowSolvedDialog(true);
+    } else {
+      setShowCheckDialog(true);
+    }
   }
 
   return (
@@ -92,6 +105,40 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
                   className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
                 >
                   No
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* check dialog */}
+        {showCheckDialog && (
+          <div className="fixed inset-0 bg-[rgba(0,0,0,0.4)] flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-xl shadow-lg text-center max-w-sm w-full">
+              <p className="mb-4 text-gray-800 font-semibold">Numbers that are <span className="text-red-800">dark red</span> are incorrect.<br />Numbers that are <span className="text-[#6096B4]">dark blue</span> are correct.<br /></p>
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={() => setShowCheckDialog(false)}
+                  className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
+                >
+                  Ok
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* solved dialog */}
+        {showSolvedDialog && (
+          <div className="fixed inset-0 bg-[rgba(0,0,0,0.4)] flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-xl shadow-lg text-center max-w-sm w-full">
+              <p className="mb-4 text-gray-800 font-semibold">Congratuations!<br /><br />You have solved this puzzle correctly!</p>
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={() => setShowSolvedDialog(false)}
+                  className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
+                >
+                  Ok
                 </button>
               </div>
             </div>
