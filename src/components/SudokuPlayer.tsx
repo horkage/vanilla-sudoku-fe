@@ -31,6 +31,8 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
       } else {
         newGrid[row][col] = num;
       }
+      incorrectCells[row][col] = false;
+
       setCurrentGrid(newGrid);
     } else {
       setHints(prev => {

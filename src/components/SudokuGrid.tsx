@@ -1,4 +1,5 @@
 'use client';
+import clsx from 'clsx';
 
 interface SudokuGridProps {
   puzzle: number[][];
@@ -50,11 +51,13 @@ export function SudokuGrid({
 
                 {/* Main number (if filled) */}
                 {puzzle[rowIndex][colIndex] !== 0 && (
-                  <div className={`
-                    absolute flex items-center justify-center text-2xl md:text-3xl font-bold
-                    ${clues[rowIndex][colIndex] !== 0 ? 'text-gray-700' : 'text-[#6096B4]'}
-                    ${incorrectCells?.[rowIndex]?.[colIndex] ? 'text-red-800' : ''}
-                    `}>
+                  <div className={clsx("absolute flex items-center justify-center text-2xl md:text-3xl font-bold",
+                    clues[rowIndex][colIndex] !== 0 ? 'text-gray-700' : 'text-[#6096B4]',
+                    {
+                      "text-red-800": incorrectCells?.[rowIndex]?.[colIndex],
+                      "text-[#6096B4]": !incorrectCells?.[rowIndex]?.[colIndex]
+                    }
+                    )}>
                     {puzzle[rowIndex][colIndex]}
                   </div>
                 )}
