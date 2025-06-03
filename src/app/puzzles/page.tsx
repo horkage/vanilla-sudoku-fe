@@ -1,3 +1,8 @@
+export const metadata = {
+  title: 'Puzzles | Vanilla Sudoku',
+  description: 'Puzzle difficulty selection page.'
+};
+
 export default function PuzzlesLanding() {
   return (
     <main className="bg-[#EEE9DA] flex justify-center items-start pt-10">

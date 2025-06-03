@@ -1,5 +1,10 @@
 import Image from "next/image";
 
+export const metadata = {
+  title: 'About | Vanilla Sudoku',
+  description: 'Learn more about Vanilla Sudoku and the mission behind it.',
+};
+
 export default function About() {
   return (
     <main className="bg-[#EEE9DA]">

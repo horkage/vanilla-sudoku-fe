@@ -2,6 +2,30 @@ import { notFound } from "next/navigation";
 import fs from "fs";
 import path from "path";
 import SudokuPlayer from "@/components/SudokuPlayer";
+import { Metadata } from 'next';
+
+type Props = {
+  params: { difficulty: string; puzzleId: string };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { difficulty, puzzleId } = await params;
+  const difficultyString = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+
+  return {
+    title: `${difficultyString} Puzzle ${puzzleId} | Vanilla Sudoku`,
+    description: `${difficultyString} Puzzle ${puzzleId}`,
+    openGraph: {
+      title: `${difficultyString} Puzzle ${puzzleId} | Vanilla Sudoku`,
+      description: `${difficultyString} Puzzle ${puzzleId}`,
+    },
+    twitter: {
+      title: `${difficultyString} Puzzle ${puzzleId} | Vanilla Sudoku`,
+      description: `${difficultyString} Puzzle ${puzzleId}`,
+    },
+  };
+}
+
 
 export default async function PuzzlePage({
   params,

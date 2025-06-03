@@ -2,6 +2,29 @@ import fs from 'fs';
 import path from 'path';
 import Link from 'next/link';
 import { Video } from 'lucide-react';
+import { Metadata } from 'next';
+
+type Props = {
+  params: { difficulty: string; };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { difficulty } = await params;
+  const difficultyString = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
+
+  return {
+    title: `${difficultyString} Puzzles | Vanilla Sudoku`,
+    description: `Try out ${difficultyString} level sudoku puzzles. Puzzles with a video icon means there is an accompanying walkthrough video.`,
+    openGraph: {
+      title: `${difficultyString} Puzzles | Vanilla Sudoku`,
+      description: `Try out ${difficultyString} level sudoku puzzles. Puzzles with a video icon means there is an accompanying walkthrough video.`,
+    },
+    twitter: {
+      title: `${difficultyString} Puzzles | Vanilla Sudoku`,
+      description: `Try out ${difficultyString} level sudoku puzzles. Puzzles with a video icon means there is an accompanying walkthrough video.`,
+    },
+  };
+}
 
 export default async function DifficultyIndexPage({
   params,
