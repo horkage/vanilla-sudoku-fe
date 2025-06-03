@@ -16,6 +16,7 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
   const [incorrectCells, setIncorrectCells] = useState<boolean[][]>(
     Array(9).fill(null).map(() => Array(9).fill(false))
   );
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   function handleCellClick(row: number, col: number) {
     setSelectedCell({ row, col });
@@ -57,6 +58,7 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
         Array.from({ length: 9 }, () => Array(9).fill(false))
       )
     );
+    setShowResetConfirm(false);
   }
 
   function handleCheck() {
@@ -72,6 +74,30 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
   return (
     <>
       <div className="flex flex-col lg:flex-row gap-2 items-start">
+
+        {/* confirm dialog */}
+        {showResetConfirm && (
+          <div className="fixed inset-0 bg-[rgba(0,0,0,0.4)] flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-xl shadow-lg text-center max-w-sm w-full">
+              <p className="mb-4 text-gray-800 font-semibold">Are you sure you want to reset the puzzle?</p>
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={handleReset}
+                  className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
+                >
+                  Yes
+                </button>
+                <button
+                  onClick={() => setShowResetConfirm(false)}
+                  className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="flex-1">
           <SudokuGrid
             puzzle={currentGrid}
@@ -91,12 +117,14 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
           </div>
 
           <div className="flex justify-center gap-8 mt-4 mb-4">
-            <button
-              onClick={handleReset}
-              className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
-            >
-              Reset
-            </button>
+              <button
+                onClick={() => setShowResetConfirm(true)}
+                className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
+              >
+                Reset
+              </button>
+
+
             <button
               onClick={handleCheck}
               className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
