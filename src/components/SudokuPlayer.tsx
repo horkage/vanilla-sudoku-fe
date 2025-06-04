@@ -26,7 +26,11 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
   const [highlightBoxPos, setHighlightBoxPos] = useState<[number, number] | null>(null);
 
   function handleCellClick(row: number, col: number) {
-    setSelectedCell({ row, col });
+    if (clues[row][col] === 0) { // don't let user select clue cells
+      setSelectedCell({ row, col });
+    } else {
+      return false;
+    }
   }
 
   function handleNumberInput(num: number, mode: "number" | "hint") {

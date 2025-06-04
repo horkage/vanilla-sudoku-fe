@@ -105,7 +105,7 @@ export function SudokuGrid({
                 onClick={() => onCellClick(rowIndex, colIndex)}
                 key={`${rowIndex}-${colIndex}`}
                 className={`relative flex items-center justify-center p-5 md:p-6 border-t-1 border-l-1 border-gray-500
-                md:text-3xl text-2xl font-bold text-gray-600 aspect-square bg-white
+                md:text-3xl text-2xl font-bold text-gray-600 aspect-square bg-white cursor-default
                   ${narrationMode ? getNarrationHighlightBorderClass(rowIndex, colIndex, highlightMode, highlightBoxPos) : 'border-gray-500'}
                   ${getBorderClasses(rowIndex, colIndex)}
                   ${selectedCell?.row === rowIndex && selectedCell?.col === colIndex ? 'bg-selected' : ''}
