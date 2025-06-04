@@ -17,6 +17,9 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
   const [incorrectCells, setIncorrectCells] = useState<boolean[][]>(
     Array(9).fill(null).map(() => Array(9).fill(false))
   );
+  const [narrationGrid, setNarrationGrid] = useState<string[][]>(
+    Array(9).fill(null).map(() => Array(9).fill(null))
+  );
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [showCheckDialog, setShowCheckDialog] = useState(false);
   const [showSolvedDialog, setShowSolvedDialog] = useState(false);
@@ -30,6 +33,16 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
       setSelectedCell({ row, col });
     } else {
       return false;
+    }
+  }
+
+  function handleRightClick(row: number, col: number) {
+    if (narrationMode) {
+      setNarrationGrid(prev => {
+        const newGrid = prev.map(r => [...r]); // deep clone
+        newGrid[row][col] = newGrid[row][col] === "X" ? "" : "X"; // toggle
+        return newGrid;
+      });
     }
   }
 
@@ -256,6 +269,8 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
             narrationMode={narrationMode}
             highlightMode={highlightMode}
             highlightBoxPos={highlightBoxPos}
+            handleRightClick={handleRightClick}
+            narrationGrid={narrationGrid}
           />
           <div className="flex justify-center gap-8 mt-2">
             <div className="text-center">

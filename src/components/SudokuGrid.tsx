@@ -11,6 +11,8 @@ interface SudokuGridProps {
   narrationMode: boolean;
   highlightMode: 'box' | 'row' | 'column' | null;
   highlightBoxPos: [number, number] | null;
+  handleRightClick: (row: number, col: number) => void;
+  narrationGrid: string[][];
 }
 
 function getBorderClasses(row: number, col: number) {
@@ -91,7 +93,9 @@ export function SudokuGrid({
   incorrectCells,
   narrationMode,
   highlightMode,
-  highlightBoxPos
+  highlightBoxPos,
+  handleRightClick,
+  narrationGrid
 }: SudokuGridProps) {
   return (
     <div id="outer" className="flex justify-center">
@@ -103,6 +107,10 @@ export function SudokuGrid({
             return (
               <div
                 onClick={() => onCellClick(rowIndex, colIndex)}
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  handleRightClick(rowIndex, colIndex)
+                }}
                 key={`${rowIndex}-${colIndex}`}
                 className={`relative flex items-center justify-center p-5 md:p-6 border-t-1 border-l-1 border-gray-500
                 md:text-3xl text-2xl font-bold text-gray-600 aspect-square bg-white cursor-default
@@ -132,6 +140,13 @@ export function SudokuGrid({
                     }
                     )}>
                     {puzzle[rowIndex][colIndex]}
+                  </div>
+                )}
+
+                {/* narration mode - right click places big red X */}
+                {narrationGrid[rowIndex][colIndex] === "X" && (
+                  <div className="absolute flex items-center justify-center text-2xl md:text-3xl font-bold text-red-800">
+                    {narrationGrid[rowIndex][colIndex]}
                   </div>
                 )}
 
