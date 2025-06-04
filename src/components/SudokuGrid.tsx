@@ -113,10 +113,12 @@ export function SudokuGrid({
                 }}
                 key={`${rowIndex}-${colIndex}`}
                 className={`relative flex items-center justify-center p-5 md:p-6 border-t-1 border-l-1 border-gray-500
-                md:text-3xl text-2xl font-bold text-gray-600 aspect-square bg-white cursor-default
+                md:text-3xl text-2xl font-bold text-gray-600 aspect-square cursor-default
                   ${narrationMode ? getNarrationHighlightBorderClass(rowIndex, colIndex, highlightMode, highlightBoxPos) : 'border-gray-500'}
                   ${getBorderClasses(rowIndex, colIndex)}
-                  ${selectedCell?.row === rowIndex && selectedCell?.col === colIndex ? 'bg-selected' : ''}
+                  ${selectedCell?.row === rowIndex && selectedCell?.col === colIndex && !narrationMode ? 'bg-selected' : ''}
+                  ${puzzle[rowIndex][colIndex] === narrationGrid[rowIndex][colIndex] && narrationGrid[rowIndex][colIndex] ? 'bg-gray-700' : 'bg-white'}
+                  ${selectedCell?.row === rowIndex && selectedCell?.col === colIndex && puzzle[rowIndex][colIndex] === 0 ? 'bg-selected' : ''}
                 `}
               >
                 {/* Hints grid */}
@@ -134,6 +136,7 @@ export function SudokuGrid({
                 {puzzle[rowIndex][colIndex] !== 0 && (
                   <div className={clsx("absolute flex items-center justify-center text-2xl md:text-3xl font-bold",
                     clues[rowIndex][colIndex] !== 0 ? 'text-gray-700' : 'text-[#6096B4]',
+                    puzzle[rowIndex][colIndex] === narrationGrid[rowIndex][colIndex] ? 'text-yellow-600' : 'text-[#6096B4]',
                     {
                       "text-red-800": incorrectCells?.[rowIndex]?.[colIndex],
                       "text-[#6096B4]": !incorrectCells?.[rowIndex]?.[colIndex]

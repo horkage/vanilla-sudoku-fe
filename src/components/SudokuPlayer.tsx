@@ -31,8 +31,15 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
   function handleCellClick(row: number, col: number) {
     if (clues[row][col] === 0) { // don't let user select clue cells
       setSelectedCell({ row, col });
-    } else {
-      return false;
+    }
+
+    if (narrationMode) {
+      // setSelectedCell({ row, col });
+      setNarrationGrid(prev => {
+        const newGrid = prev.map(r => [...r]); // deep clone
+        newGrid[row][col] = currentGrid[row][col];
+        return newGrid;
+      });
     }
   }
 
@@ -106,8 +113,6 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
     }
   }
 
-
-
   /* narration stuff */
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -123,6 +128,7 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
         if (key === 'b') setHighlightMode('box');
         else if (key === 'r') setHighlightMode('row');
         else if (key === 'c') setHighlightMode('column');
+        else if (key === 'x') setNarrationGrid(Array(9).fill(null).map(() => Array(9).fill(null)));
 
         // Handle navigation
         else if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(key)) {
