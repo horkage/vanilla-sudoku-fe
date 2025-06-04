@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { SudokuGrid } from "@/components/SudokuGrid";
 import NumberPad from '@/components/NumberPad';
 import HintPad from '@/components/HintPad';
@@ -21,6 +21,9 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
   const [showCheckDialog, setShowCheckDialog] = useState(false);
   const [showSolvedDialog, setShowSolvedDialog] = useState(false);
   const [showHelpDialog, setShowHelpDialog] = useState(false);
+  const [narrationMode, setNarrationMode] = useState(false);
+  const [highlightMode, setHighlightMode] = useState<"box" | "row" | "column" | null>(null);
+  const [highlightBoxPos, setHighlightBoxPos] = useState<[number, number] | null>(null);
 
   function handleCellClick(row: number, col: number) {
     setSelectedCell({ row, col });
@@ -85,6 +88,59 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
       setShowCheckDialog(true);
     }
   }
+
+
+
+  /* narration stuff */
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (event.key.toLowerCase() === 'n') {
+        setNarrationMode((prev) => !prev);
+        setHighlightBoxPos(null);
+      } else {
+        if (!narrationMode) return;
+
+        const key = e.key;
+
+        // Handle mode switching
+        if (key === 'b') setHighlightMode('box');
+        else if (key === 'r') setHighlightMode('row');
+        else if (key === 'c') setHighlightMode('column');
+
+        // Handle navigation
+        else if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(key)) {
+          e.preventDefault(); // Prevent scroll
+
+          setHighlightBoxPos((prev) => {
+            if (!prev) return [0, 0];
+
+            const [r, c] = prev;
+
+            if (highlightMode === 'box') {
+              const newRow = Math.max(0, Math.min(2, r + (key === 'ArrowDown' ? 1 : key === 'ArrowUp' ? -1 : 0)));
+              const newCol = Math.max(0, Math.min(2, c + (key === 'ArrowRight' ? 1 : key === 'ArrowLeft' ? -1 : 0)));
+              return [newRow, newCol];
+            }
+
+            if (highlightMode === 'row') {
+              const newRow = Math.max(0, Math.min(8, r + (key === 'ArrowDown' ? 1 : key === 'ArrowUp' ? -1 : 0)));
+              return [newRow, c]; // Only row changes
+            }
+
+            if (highlightMode === 'column') {
+              const newCol = Math.max(0, Math.min(8, c + (key === 'ArrowRight' ? 1 : key === 'ArrowLeft' ? -1 : 0)));
+              return [r, newCol]; // Only col changes
+            }
+
+            return prev;
+          });
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [narrationMode, highlightMode, highlightBoxPos]);
 
   return (
     <>
@@ -193,6 +249,9 @@ export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtub
             onCellClick={handleCellClick}
             hints={hints}
             incorrectCells={incorrectCells}
+            narrationMode={narrationMode}
+            highlightMode={highlightMode}
+            highlightBoxPos={highlightBoxPos}
           />
           <div className="flex justify-center gap-8 mt-2">
             <div className="text-center">
