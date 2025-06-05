@@ -2,13 +2,12 @@ import fs from 'fs';
 import path from 'path';
 import Link from 'next/link';
 import { Video } from 'lucide-react';
-import { Metadata } from 'next';
 
-type Props = {
-  params: { difficulty: string; };
-};
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ difficulty: string }>
+}): Promise<Metadata> {
   const { difficulty } = await params;
   const difficultyString = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
 
@@ -29,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function DifficultyIndexPage({
   params,
 }: {
-  params: { difficulty: string };
+  params: Promise<{ difficulty: string }>;
 }) {
   const { difficulty } = await params;
   const puzzleDir = path.join(process.cwd(), 'puzzle-data', difficulty);
