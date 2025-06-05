@@ -16,7 +16,7 @@ export default function About() {
             <br /><br />
             Being a software engineer (rumor has it, at least, I&apos;ve been called far worse), I became fascinated with how puzzles might be constructed. So, I started playing around with puzzle generation. I constructed a reasonably sophisticated toolchain that let me not only generate them but also solve them as I would.
             <br /><br />
-            You see, there&apos;s a tricky thing about generating sudoku puzzles that are actually playable: ensuring an unambiguous grid. It&apos;s ok if you don&apos;t know what that means, I didn't know what it was either until I started generating things at random and throwing them at the wall. It is then that I understood that generating solvable sudoku puzzles took a little more than random chance and brute force solving.
+            You see, there&apos;s a tricky thing about generating sudoku puzzles that are actually playable: ensuring an unambiguous grid. It&apos;s ok if you don&apos;t know what that means, I didn&apos;t know what it was either until I started generating things at random and throwing them at the wall. It is then that I understood that generating solvable sudoku puzzles took a little more than random chance and brute force solving.
             <br /><br />
             I did not look up how &ldquo;Big Sudoku&ldquo; does it, nor have I sourced anyone else&apos;s work. All my puzzles are home-grown and hosted entirely by me. And here I am. I&apos;m still striving for generating the perfect puzzle, but in the meantime, there&apos;s no reason you can&apos;t play along with me during this unexpectedly fascinating journey.
             <br /><br />
