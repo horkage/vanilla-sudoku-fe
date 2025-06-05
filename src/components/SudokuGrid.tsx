@@ -27,16 +27,6 @@ function getBorderClasses(row: number, col: number) {
   return classes.join(" ");
 }
 
-function isCellInBox(cellRow: number, cellCol: number, boxRow: number, boxCol: number): boolean {
-  const startRow = boxRow * 3;
-  const startCol = boxCol * 3;
-  return (
-    cellRow >= startRow && cellRow < startRow + 3 &&
-    cellCol >= startCol && cellCol < startCol + 3
-  );
-}
-
-
 function getNarrationHighlightBorderClass(
   row: number,
   col: number,

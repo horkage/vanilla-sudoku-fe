@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 export const metadata = {
   title: 'About | Vanilla Sudoku',
   description: 'Learn more about Vanilla Sudoku and the mission behind it.',

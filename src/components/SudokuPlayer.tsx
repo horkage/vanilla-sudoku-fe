@@ -6,7 +6,7 @@ import NumberPad from '@/components/NumberPad';
 import HintPad from '@/components/HintPad';
 import { HelpCircle } from 'lucide-react';
 
-export default function SudokuPlayer({ puzzle, puzzleId, clues, solution, youtubeId }) {
+export default function SudokuPlayer({ puzzle, clues, solution, youtubeId }) {
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);
   const [currentGrid, setCurrentGrid] = useState<number[][]>(structuredClone(puzzle));
   const [hints, setHints] = useState<boolean[][][]>(
