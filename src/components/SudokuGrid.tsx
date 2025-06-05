@@ -56,27 +56,27 @@ function getNarrationHighlightBorderClass(
 
     if (row < startRow || row > endRow || col < startCol || col > endCol) return '';
 
-    if (row === startRow) borders.push('border-t-1', 'border-t-red-500');
-    if (row === endRow) borders.push('border-b-1', 'border-b-red-500');
-    if (col === startCol) borders.push('border-l-1', 'border-l-red-500');
-    if (col === endCol) borders.push('border-r-1', 'border-r-red-500');
+    if (row === startRow) borders.push('border-t-1', 'border-t-rose-300');
+    if (row === endRow) borders.push('border-b-1', 'border-b-rose-300');
+    if (col === startCol) borders.push('border-l-1', 'border-l-rose-300');
+    if (col === endCol) borders.push('border-r-1', 'border-r-rose-300');
   }
 
   if (highlightMode === 'row') {
     if (row === boxRow) {
-      borders.push('border-t-1', 'border-t-red-500');
-      borders.push('border-b-1', 'border-b-red-500');
-      if (col === 0) borders.push('border-l-1', 'border-l-red-500');
-      if (col === 8) borders.push('border-r-1', 'border-r-red-500');
+      borders.push('border-t-1', 'border-t-rose-300');
+      borders.push('border-b-1', 'border-b-rose-300');
+      if (col === 0) borders.push('border-l-1', 'border-l-rose-300');
+      if (col === 8) borders.push('border-r-1', 'border-r-rose-300');
     }
   }
 
   if (highlightMode === 'column') {
     if (col === boxCol) {
-      borders.push('border-l-1', 'border-l-red-500');
-      borders.push('border-r-1', 'border-r-red-500');
-      if (row === 0) borders.push('border-t-1', 'border-t-red-500');
-      if (row === 8) borders.push('border-b-1', 'border-b-red-500');
+      borders.push('border-l-1', 'border-l-rose-300');
+      borders.push('border-r-1', 'border-r-rose-300');
+      if (row === 0) borders.push('border-t-1', 'border-t-rose-300');
+      if (row === 8) borders.push('border-b-1', 'border-b-rose-300');
     }
   }
 
