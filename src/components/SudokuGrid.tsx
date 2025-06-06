@@ -9,7 +9,7 @@ interface SudokuGridProps {
   onCellClick: (row: number, col: number) => void;
   incorrectCells: boolean[][];
   narrationMode: boolean;
-  highlightMode: 'box' | 'row' | 'column' | null;
+  highlightMode: 'column' | 'row' | 'box';
   highlightBoxPos: [number, number] | null;
   handleRightClick: (row: number, col: number) => void;
   narrationGrid: string[][];

@@ -4,11 +4,11 @@ import path from "path";
 import SudokuPlayer from "@/components/SudokuPlayer";
 import { Metadata } from 'next';
 
-type Props = {
-  params: { difficulty: string; puzzleId: string };
-};
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ difficulty: string, puzzleId: string }>
+}): Promise<Metadata> {
   const { difficulty, puzzleId } = await params;
   const difficultyString = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
 
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function PuzzlePage({
   params,
 }: {
-  params: { difficulty: string; puzzleId: string };
+  params: Promise<{ difficulty: string, puzzleId: string }>;
 }) {
   const { difficulty, puzzleId } = await params;
 
@@ -60,7 +60,7 @@ export default async function PuzzlePage({
       <main className="bg-[#EEE9DA] flex justify-center">
         <div className="w-[95%] md:w-[75%] mt-4">
           <h1 className="text-2xl font-semibold text-[#333333] mb-2 text-center">{difficulty.charAt(0).toUpperCase()}{difficulty.slice(1)} Puzzle: {puzzleId}</h1>
-          <SudokuPlayer puzzle={puzzle} puzzleId={puzzleId} clues={clues} solution={solution} youtubeId={youtubeId} />
+          <SudokuPlayer puzzle={puzzle} clues={clues} solution={solution} youtubeId={youtubeId} />
         </div>
       </main>
     );

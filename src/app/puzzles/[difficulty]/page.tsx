@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import Link from 'next/link';
 import { Video } from 'lucide-react';
+import type { Metadata } from 'next'
 
 export async function generateMetadata({
   params
