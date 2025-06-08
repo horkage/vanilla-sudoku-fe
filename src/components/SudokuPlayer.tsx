@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { SudokuGrid } from "@/components/SudokuGrid";
 import NumberPad from '@/components/NumberPad';
 import HintPad from '@/components/HintPad';
-import { HelpCircle } from 'lucide-react';
 
 export default function SudokuPlayer({ puzzle, clues, solution, youtubeId }) {
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);
@@ -74,6 +73,32 @@ export default function SudokuPlayer({ puzzle, clues, solution, youtubeId }) {
             r === row && c === col
               ? cellHints.map((val, i) => (i === num ? !val : val))
               : cellHints
+          )
+        );
+        return newHints;
+      });
+    }
+  }
+
+  function deleteInput() {
+    if (!selectedCell) return;
+    const { row, col } = selectedCell;
+
+    const newGrid = structuredClone(currentGrid);
+    if (clues[row][col] === 0 && currentGrid[row][col] !== 0) {
+      newGrid[row][col] = 0;
+      incorrectCells[row][col] = false;
+      setCurrentGrid(newGrid);
+      return; // return early if we deleted a number just in case there are hints as well
+    }
+
+    // Then, if no number was deleted, check for hints to clear
+    const hasHints = hints[row][col].some((val) => val);
+    if (hasHints) {
+      setHints((prev) => {
+        const newHints = prev.map((rowHints, r) =>
+          rowHints.map((cellHints, c) =>
+            r === row && c === col ? cellHints.map(() => false) : cellHints
           )
         );
         return newHints;
@@ -168,13 +193,6 @@ export default function SudokuPlayer({ puzzle, clues, solution, youtubeId }) {
   return (
     <>
       <div className="flex flex-col lg:flex-row gap-2 items-start">
-      <button
-        onClick={() => setShowHelpDialog(true)}
-        className="fixed top-22 left-2 z-50"
-        aria-label="Help"
-      >
-        <HelpCircle className="w-6 h-6 text-gray-600 hover:text-[#6096B4]" />
-      </button>
 
         {/* confirm dialog */}
         {showResetConfirm && (
@@ -244,7 +262,7 @@ export default function SudokuPlayer({ puzzle, clues, solution, youtubeId }) {
                 Place numbers within the puzzle grid so that each number in every box, row, and column are all unique.
               </p>
               <p className="mb-4 text-gray-800 text-left">
-                Poke a cell, and then poke either a hint (lower left) or a number (lower right). Hints and numbers can be undone by poking the same number again on the selected cell.
+                Poke a cell, and then poke either a hint (lower left) or a number (lower right). Hints and numbers can be undone by poking the same number again on the selected cell or mashing the big X button in between the number pads. The X button will first delete a number, then hints, if any exist.
               </p>
               <p className="mb-4 text-gray-800 text-left">
                 You can see if your numbers are correct at any time using the Check button below. Clear the entire grid with the Reset button if you wish to start over.
@@ -278,10 +296,27 @@ export default function SudokuPlayer({ puzzle, clues, solution, youtubeId }) {
             handleRightClick={handleRightClick}
             narrationGrid={narrationGrid}
           />
-          <div className="flex justify-center gap-8 mt-2">
+          <div className="flex justify-center gap-1 mt-2">
             <div className="text-center">
               <HintPad label="Hints" onInput={(num) => handleNumberInput(num, 'hints')} />
             </div>
+
+            {/* Button stack between pads */}
+            <div className="flex flex-col items-center justify-center gap-4 ml-2 mr-2 mt-8">
+              <button
+                className="px-4 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
+                onClick={() => deleteInput()}
+              >
+                X
+              </button>
+              <button
+                className="px-4 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
+                onClick={() => setShowHelpDialog(true)}
+              >
+                ?
+              </button>
+            </div>
+
             <div className="text-center">
               <NumberPad label="Numbers" onInput={(num) => handleNumberInput(num, 'number')} />
             </div>
@@ -294,7 +329,6 @@ export default function SudokuPlayer({ puzzle, clues, solution, youtubeId }) {
             >
               Reset
             </button>
-
             <button
               onClick={handleCheck}
               className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
