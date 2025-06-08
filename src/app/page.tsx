@@ -54,6 +54,27 @@ export default function Home() {
         <div className="w-[90%] md:w-[75%] space-y-6">
           { /* news stuff things */ }
 
+          { /* embedded thing */ }
+          <div className="bg-white border border-[#333333] rounded p-4 mb-4 shadow-sm flex flex-col md:flex-row gap-4">
+            <div className="w-full md:w-1/3">
+              <iframe
+                className="w-full aspect-video rounded"
+                src="https://www.youtube.com/embed/6fH0DfH6kEM"
+                title="YouTube video"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+            <div className="flex-1">
+              <h2 className="text-lg font-semibold text-[#333333] mb-2">New Video: Easy Puzzle 0001 Walkthrough</h2>
+              <p className="text-[#333333] text-base leading-relaxed">
+                I walk through and narrate solving the very first puzzle my algorithm ever made. I make some fun mistakes, so check it out!
+              </p>
+              <p className="text-sm text-[#666] mt-2">Jun 7, 2025</p>
+            </div>
+          </div>
+
           { /* text only thing */ }
           <div className="bg-white border border-[#333333] rounded p-4 mb-4 shadow-sm">
             <h2 className="text-lg font-semibold text-[#333333] mb-2">New Stuff!</h2>
