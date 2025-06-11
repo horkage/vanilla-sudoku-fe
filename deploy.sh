@@ -23,6 +23,10 @@ scp -i $PEM_FILE $ARCHIVE_NAME $REMOTE_USER@$REMOTE_HOST:$REMOTE_DIR
 # Remote deploy
 ssh -i $PEM_FILE $REMOTE_USER@$REMOTE_HOST << EOF
   bash -l -c '
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    nvm use 20
+
     set -e
     cd $REMOTE_DIR
 
