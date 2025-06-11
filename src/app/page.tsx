@@ -16,7 +16,7 @@ export default function Home() {
           <div className="relative z-20 text-[#333333]">
             <h1 className="text-xl md:text-2xl font-bold mb-4 tracking-wide border-b border-[#CCC]">Old Fashioned Sudoku Puzzles</h1>
             <div className="text-base md:text-lg leading-relaxed">
-              I made this site because I like sudoku. It&apos;s just that I happen to like my sudoku puzzles to be like my ice cream: plain. Like good ol&apos; fashioned vanilla. Here, watch this thing:
+              I didn&apos;t even know what sudoku was until a couple of years ago. I started puttering at it in some puzzle books and found that I started to really like the game a lot, and, now I&apos;m making my own puzzles. I believe that there could very well be a hidden sudoku player within you that you just haven&apos;t met yet - because that&apos;s what happened with me.<br /><br />My hope is that I can shine you on to sudkoku if you&apos;re new to it, and hopefully show things from a different, yet useful perspective to veterans as well.<br /><br /><a className="vs-link" href="/puzzles">All of my puzzles</a> are home-made and are designed to be enjoyed the way I enjoy sudoku: with minimal digital fuss and a nod towards analog play. Here, watch this thing:
               <br />
 
               <div className="mt-4 flex justify-center">
@@ -69,7 +69,7 @@ export default function Home() {
             <div className="flex-1">
               <h2 className="text-lg font-semibold text-[#333333] mb-2">New Video: Easy Puzzle 0001 Walkthrough</h2>
               <p className="text-[#333333] text-base leading-relaxed">
-                I walk through and narrate solving the very first puzzle my algorithm ever made. I make some fun mistakes, so check it out!
+                I walk through and narrate solving the very first puzzle my algorithm ever made. I make some fun mistakes, so check it out!<br /><br />Or, you can <a className="vs-link" href="/puzzles/easy/puzzle/0001">play the puzzle</a> yourself right now.
               </p>
               <p className="text-sm text-[#666] mt-2">Jun 7, 2025</p>
             </div>
@@ -79,7 +79,7 @@ export default function Home() {
           <div className="bg-white border border-[#333333] rounded p-4 mb-4 shadow-sm">
             <h2 className="text-lg font-semibold text-[#333333] mb-2">New Stuff!</h2>
             <p className="text-[#333333] text-base leading-relaxed">
-              I pulled the site out of the stone age. It should be reasonably responsive on all devices, now. The words &quot;reasonably&quot; and &quot;should&quot; are doing a lot of heavy lifting here, of course.
+              I pulled the site out of the stone age. It should be reasonably responsive on all devices, now. The words &quot;reasonably&quot; and &quot;should&quot; are doing a lot of heavy lifting here, of course. Be sure to checkout some of the puzzles I have made.<br /><br />I have some <a className="vs-link" href="/puzzles/easy">easy</a> puzzles, some <a className="vs-link" href="/puzzles/medium">medium</a> ones, and a lonely <a className="vs-link" href="/puzzles/hard">hard</a> one, all by itself.  If there is a video icon next to the puzzle, that means that puzzle has a walkthrough!
             </p>
             <p className="text-sm text-[#666] mt-2">May 28, 2025</p>
           </div>

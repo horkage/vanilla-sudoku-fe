@@ -21,12 +21,10 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/*
-a {
+a.vs-link {
     color: #6096B4;
     text-decoration: underline;
 }
-*/
 
 @layer utilities {
   .bg-selected {
