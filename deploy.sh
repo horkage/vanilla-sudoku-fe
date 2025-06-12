@@ -23,9 +23,13 @@ scp -i $PEM_FILE $ARCHIVE_NAME $REMOTE_USER@$REMOTE_HOST:$REMOTE_DIR
 # Remote deploy
 ssh -i $PEM_FILE $REMOTE_USER@$REMOTE_HOST << EOF
   bash -l -c '
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    nvm use 20
+    # Properly source NVM and use Node 20
+    export NVM_DIR="\$HOME/.nvm"
+    [ -s "\$NVM_DIR/nvm.sh" ] && \. "\$NVM_DIR/nvm.sh"
+    nvm use 20 || {
+      echo "⚠️ nvm use failed, falling back to direct PATH"
+      export PATH="\$HOME/.nvm/versions/node/v20.19.2/bin:\$PATH"
+    }
 
     set -e
     cd $REMOTE_DIR
