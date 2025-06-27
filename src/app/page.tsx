@@ -61,6 +61,49 @@ export default function Home() {
             <div className="w-full md:w-1/3">
               <iframe
                 className="w-full aspect-video rounded"
+                src="https://www.youtube.com/embed/bMQ6rY01V4c"
+                title="YouTube video"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+            <div className="flex-1">
+              <h2 className="text-lg font-semibold text-[#333333] mb-2">New Video: Introductory Sudoku Walkthrough Part 2</h2>
+              <p className="text-[#333333] text-base leading-relaxed">
+                This is part two of my introductory sudoku walkthrough where I apply what I covered in part one to solve one of my very own difficult puzzles.  We address things like pointing pairs, naked pairs, and x-wings, but we do so as they naturally and organically reveal themselves within the grid as we solve the puzzle.<br /><br />If there is a sudoku player hiding within you, I hope this video will help coax them out!<br /><br />
+                You can play this very puzzle featured within this video <Link className="vs-link" href="/puzzles/hard/puzzle/0001">right here</Link>.
+              </p>
+              <p className="text-sm text-[#666] mt-2">Jun 26, 2025</p>
+            </div>
+          </div>
+
+          { /* embedded thing */ }
+          <div className="bg-white border border-[#333333] rounded p-4 mb-4 shadow-sm flex flex-col md:flex-row gap-4">
+            <div className="w-full md:w-1/3">
+              <iframe
+                className="w-full aspect-video rounded"
+                src="https://www.youtube.com/embed/2CVLuVnCxws"
+                title="YouTube video"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+            <div className="flex-1">
+              <h2 className="text-lg font-semibold text-[#333333] mb-2">New Video: Introductory Sudoku Walkthrough Part 1</h2>
+              <p className="text-[#333333] text-base leading-relaxed">
+                This is part one of my introductory sudoku walkthrough where I lay some basic foundations for solving any puzzle.  In the second part, we will actually solve a hard puzzle together using what we cover in this video. You can even play the puzzle featured in this video yourself <Link className="vs-link" href="/puzzles/hard/puzzle/0001">right here</Link>.<br /><br />We cover basics like the rules of sudoku and general strategy that can be applied to any puzzle, and with this two-part series, you will be ready to blast through almost any puzzle!
+              </p>
+              <p className="text-sm text-[#666] mt-2">Jun 26, 2025</p>
+            </div>
+          </div>
+
+          { /* embedded thing */ }
+          <div className="bg-white border border-[#333333] rounded p-4 mb-4 shadow-sm flex flex-col md:flex-row gap-4">
+            <div className="w-full md:w-1/3">
+              <iframe
+                className="w-full aspect-video rounded"
                 src="https://www.youtube.com/embed/6fH0DfH6kEM"
                 title="YouTube video"
                 frameBorder="0"
