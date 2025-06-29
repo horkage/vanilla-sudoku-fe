@@ -32,6 +32,7 @@ function getStaticUrls() {
   return [
     '/',
     '/about',
+    '/videos',
     '/puzzles/easy',
     '/puzzles/medium',
     '/puzzles/hard',

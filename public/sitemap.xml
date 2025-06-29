@@ -3,7 +3,7 @@
   
     <url>
       <loc>https://vanilla-sudoku.com/</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -11,7 +11,15 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/about</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.8</priority>
+    </url>
+  
+
+    <url>
+      <loc>https://vanilla-sudoku.com/videos</loc>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -19,7 +27,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/easy</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -27,7 +35,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/medium</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -35,7 +43,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/hard</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -43,7 +51,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/easy/puzzle/0001</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -51,7 +59,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/easy/puzzle/0002</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -59,7 +67,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/easy/puzzle/0003</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -67,7 +75,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/easy/puzzle/0004</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -75,7 +83,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/easy/puzzle/0005</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -83,7 +91,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/easy/puzzle/0006</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -91,7 +99,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/easy/puzzle/0007</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -99,7 +107,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/easy/puzzle/0008</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -107,7 +115,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/easy/puzzle/0009</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -115,7 +123,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/easy/puzzle/0010</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -123,7 +131,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/easy/puzzle/0011</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -131,7 +139,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/easy/puzzle/0012</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -139,7 +147,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/easy/puzzle/0013</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -147,7 +155,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/hard/puzzle/0001</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -155,7 +163,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/medium/puzzle/0001</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -163,7 +171,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/medium/puzzle/0002</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -171,7 +179,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/medium/puzzle/0003</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -179,7 +187,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/medium/puzzle/0004</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -187,7 +195,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/medium/puzzle/0005</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -195,7 +203,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/medium/puzzle/0006</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -203,7 +211,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/medium/puzzle/0007</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
@@ -211,7 +219,7 @@
 
     <url>
       <loc>https://vanilla-sudoku.com/puzzles/medium/puzzle/0008</loc>
-      <lastmod>2025-06-11T23:10:59.717Z</lastmod>
+      <lastmod>2025-06-27T21:45:31.122Z</lastmod>
       <changefreq>weekly</changefreq>
       <priority>0.8</priority>
     </url>
