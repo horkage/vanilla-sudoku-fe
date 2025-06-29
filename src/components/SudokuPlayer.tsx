@@ -32,6 +32,9 @@ export default function SudokuPlayer({ puzzle, clues, solution, youtubeId }) {
       setSelectedCell({ row, col });
     }
 
+    // de-select cell if clicked again
+    if (!narrationMode && selectedCell?.row === row && selectedCell?.col === col) setSelectedCell(null);
+
     if (narrationMode) {
       // setSelectedCell({ row, col });
       setNarrationGrid(prev => {
@@ -145,9 +148,27 @@ export default function SudokuPlayer({ puzzle, clues, solution, youtubeId }) {
         setNarrationMode((prev) => !prev);
         setHighlightBoxPos(null);
       } else {
-        if (!narrationMode) return;
-
         const key = e.key;
+        // Handle numeric input
+        if (/^(Digit|Numpad)[1-9]$/.test(e.code)) {
+          let num = parseInt(e.code.replace('Digit', '').replace('Numpad', ''), 10);
+          const mode = e.shiftKey ? 'hint' : 'number';
+          if (mode === 'hint') num = num - 1;
+          handleNumberInput(num, mode);
+        }
+
+        // Handle backspace to delete
+        if (key === 'Backspace' || key === 'Delete') {
+          deleteInput();
+        }
+
+        // Handle de-selecting cells
+        if (key === 'Escape') {
+          setSelectedCell(null);
+        }
+
+        // bomb out from here if not in narration mode
+        if (!narrationMode) return;
 
         // Handle mode switching
         if (key === 'b') setHighlightMode('box');
@@ -188,7 +209,7 @@ export default function SudokuPlayer({ puzzle, clues, solution, youtubeId }) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [narrationMode, highlightMode, highlightBoxPos]);
+  }, [narrationMode, highlightMode, highlightBoxPos, handleNumberInput, deleteInput]);
 
   return (
     <>
