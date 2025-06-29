@@ -8,7 +8,7 @@ type HintPadProps = {
 export default function HintPad({ label, onInput }: HintPadProps) {
   return (
     <div className="flex flex-col items-center">
-      <div className="mb-1 font-medium text-gray-700">{label}</div>
+      <div className="mb-1 font-bold text-gray-700">{label}</div>
       <div className="grid grid-cols-3 grid-rows-3 gap-1">
         {[...Array(9)].map((_, i) => (
           <button
