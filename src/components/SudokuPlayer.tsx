@@ -283,13 +283,16 @@ export default function SudokuPlayer({ puzzle, clues, solution, youtubeId }) {
                 Place numbers within the puzzle grid so that each number in every box, row, and column are all unique.
               </p>
               <p className="mb-4 text-gray-800 text-left">
-                Poke a cell, and then poke either a hint (lower left) or a number (lower right). Hints and numbers can be undone by poking the same number again on the selected cell or mashing the big X button in between the number pads. The X button will first delete a number, then hints, if any exist.
+                Poke a cell, and then poke either a hint (lower left) or a number (lower right). Hints and numbers can be undone by poking the same number again on the selected cell or mashing the big X button in between the number pads. The X button will first delete a number, then hints, if any exist. Poke a cell again to de-select it
               </p>
               <p className="mb-4 text-gray-800 text-left">
                 You can see if your numbers are correct at any time using the Check button below. Clear the entire grid with the Reset button if you wish to start over.
               </p>
               <p className="mb-4 text-gray-800 text-left">
                 You could also use the Check button to step through each number until it turns blue if you happen to get stuck or are new to sudoku.
+              </p>
+              <p className="mb-4 text-gray-800 text-left hidden md:block">
+                You can also use the number keys or your numeric keypad to place numbers, and hold <code><b>Shift</b></code> with the number keys to place hints. Hit <code><b>Escape</b></code> to de-select a cell, <code><b>Backspace</b></code> or <code><b>Del</b></code> to remove hints and numbers.
               </p>
               <div className="flex justify-center gap-4">
                 <button
