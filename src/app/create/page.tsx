@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { CreateGrid } from "@/components/CreateGrid";
 import { useRouter } from 'next/navigation';
 import NumberPad from '@/components/NumberPad';
+import { encodeGameState } from "@/utils/gameStateCodec";
 
 export default function CreatePage() {
   const puzzle: number[][] = Array.from({ length: 9 }, () =>
@@ -44,10 +45,11 @@ export default function CreatePage() {
   }
 
   function handleCreate() {
-    const flatPuzzle = currentGrid.flat().join('');
-    const encoded = encodeURIComponent(flatPuzzle);
-    const url = `/custom?data=${encoded}`;
-    console.log(url);
+    const clues = currentGrid.flat();
+    const inputs = Array(81).fill(0);
+    const hints = Array(81).fill(0).map(() => Array(9).fill(0));
+    const state = encodeGameState({ clues, inputs, hints });
+    const url = `/custom?state=${state}`;
     setShowCreateConfirm(false);
     router.push(url);
   }
@@ -122,7 +124,7 @@ export default function CreatePage() {
               onClick={() => setShowCreateConfirm(true)}
               className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
             >
-              Make Shareable Link
+              Create Puzzle Now
             </button>
           </div>
         </div>

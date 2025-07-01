@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { SudokuGrid } from "@/components/SudokuGrid";
 import NumberPad from '@/components/NumberPad';
 import HintPad from '@/components/HintPad';
+import { encodeGameState } from "@/utils/gameStateCodec";
+import Link from 'next/link';
 
 export default function SudokuPlayer({ puzzle, clues, solution, youtubeId }) {
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);
@@ -23,9 +25,11 @@ export default function SudokuPlayer({ puzzle, clues, solution, youtubeId }) {
   const [showCheckDialog, setShowCheckDialog] = useState(false);
   const [showSolvedDialog, setShowSolvedDialog] = useState(false);
   const [showHelpDialog, setShowHelpDialog] = useState(false);
+  const [showShareDialog, setShowShareDialog] = useState(false);
   const [narrationMode, setNarrationMode] = useState(false);
   const [highlightMode, setHighlightMode] = useState<"box" | "row" | "column" | null>(null);
   const [highlightBoxPos, setHighlightBoxPos] = useState<[number, number] | null>(null);
+  const [shareLink, setShareLink] = useState<string | null>(null);
 
   function handleCellClick(row: number, col: number) {
     if (clues[row][col] === 0) { // don't let user select clue cells
@@ -141,6 +145,35 @@ export default function SudokuPlayer({ puzzle, clues, solution, youtubeId }) {
     }
   }
 
+  function handleShare() {
+    // Build inputs: only user-entered numbers
+    const customInputs = currentGrid.map((row, i) =>
+      row.map((cell, j) =>
+        cell !== clues[i][j] ? cell : 0
+      )
+    );
+
+    // Flatten for encoder
+    const flatClues = clues.flat();
+    const flatInputs = customInputs.flat();
+    const hints = Array(81).fill(0).map(() => Array(9).fill(0));
+
+    // Encode state
+    const state = encodeGameState({ clues: flatClues, inputs: flatInputs, hints });
+
+    // Now safely build full URL in the browser
+    const url = `${window.location.origin}/custom?state=${state}`;
+    // const url = `http:192.168.0.3:3000/custom?state=${state}`;
+
+    // Copy to clipboard
+    navigator.clipboard.writeText(url)
+      .then(() => console.log("Copied to clipboard!"))
+      .catch(console.error);
+
+    setShareLink(url);
+    setShowShareDialog(true);
+  }
+
   /* narration stuff */
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -232,6 +265,26 @@ export default function SudokuPlayer({ puzzle, clues, solution, youtubeId }) {
                   className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
                 >
                   No
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* share dialog */}
+        {showShareDialog && (
+          <div className="fixed inset-0 bg-[rgba(0,0,0,0.4)] flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-xl shadow-lg text-center max-w-sm w-full">
+              <p className="mb-4 text-gray-800 font-semibold">Puzzle copied to clipboard.</p>
+              <p className="mb-4 text-gray-800 font-semibold">
+                <Link className="vs-link" target="_new" href={shareLink}>Puzzle Link</Link>
+              </p>
+              <div className="flex justify-center gap-4">
+                <button
+                  onClick={() => setShowShareDialog(false)}
+                  className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
+                >
+                  Ok
                 </button>
               </div>
             </div>
@@ -358,6 +411,12 @@ export default function SudokuPlayer({ puzzle, clues, solution, youtubeId }) {
               className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
             >
               Check
+            </button>
+            <button
+              onClick={handleShare}
+              className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
+            >
+              Share
             </button>
           </div>
         </div>
