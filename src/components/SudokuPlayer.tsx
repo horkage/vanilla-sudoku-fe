@@ -7,14 +7,18 @@ import HintPad from '@/components/HintPad';
 import { encodeGameState } from "@/utils/gameStateCodec";
 import Link from 'next/link';
 
-export default function SudokuPlayer({ puzzle, clues, solution, youtubeId }) {
+export default function SudokuPlayer({ puzzle, clues, solution, youtubeId, customHints }) {
   const [selectedCell, setSelectedCell] = useState<{ row: number; col: number } | null>(null);
   const [currentGrid, setCurrentGrid] = useState<number[][]>(structuredClone(puzzle));
+
   const [hints, setHints] = useState<boolean[][][]>(
-    Array.from({ length: 9 }, () =>
-      Array.from({ length: 9 }, () => Array(9).fill(false))
-    )
+    () => customHints
+      ? customHints
+      : Array.from({ length: 9 }, () =>
+          Array.from({ length: 9 }, () => Array(9).fill(false))
+        )
   );
+
   const [incorrectCells, setIncorrectCells] = useState<boolean[][]>(
     Array(9).fill(null).map(() => Array(9).fill(false))
   );
@@ -156,14 +160,24 @@ export default function SudokuPlayer({ puzzle, clues, solution, youtubeId }) {
     // Flatten for encoder
     const flatClues = clues.flat();
     const flatInputs = customInputs.flat();
-    const hints = Array(81).fill(0).map(() => Array(9).fill(0));
+    const flatHints = [];
+    for (let i = 0; i < 9; i++) {
+      for (let j = 0; j < 9; j++) {
+        flatHints.push(hints[i][j]);
+      }
+    }
+
+    const properHints = Array.from({ length: 9 }, (_, i) =>
+      Array.from({ length: 9 }, (_, j) =>
+        flatHints[i * 9 + j]
+      )
+    );
 
     // Encode state
-    const state = encodeGameState({ clues: flatClues, inputs: flatInputs, hints });
+    const state = encodeGameState({ clues: flatClues, inputs: flatInputs, hints: properHints });
 
     // Now safely build full URL in the browser
     const url = `${window.location.origin}/custom?state=${state}`;
-    // const url = `http:192.168.0.3:3000/custom?state=${state}`;
 
     // Copy to clipboard
     navigator.clipboard.writeText(url)

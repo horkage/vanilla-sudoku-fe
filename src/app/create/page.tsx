@@ -38,7 +38,6 @@ export default function CreatePage() {
   function deleteInput() {
     if (!selectedCell) return;
     const { row, col } = selectedCell;
-
     const newGrid = structuredClone(currentGrid);
     newGrid[row][col] = 0;
     setCurrentGrid(newGrid);
@@ -47,7 +46,9 @@ export default function CreatePage() {
   function handleCreate() {
     const clues = currentGrid.flat();
     const inputs = Array(81).fill(0);
-    const hints = Array(81).fill(0).map(() => Array(9).fill(0));
+    const hints = Array.from({ length: 9 }, () =>
+      Array.from({ length: 9 }, () => Array(9).fill(false))
+    );
     const state = encodeGameState({ clues, inputs, hints });
     const url = `/custom?state=${state}`;
     setShowCreateConfirm(false);
