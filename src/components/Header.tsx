@@ -23,7 +23,9 @@ export default function Header() {
 
           {/* Center: Site title */}
           <div className="flex items-center gap-2">
-            <h1 className="text-2xl font-bold text-[#EEE9DA]">Vanilla Sudoku</h1>
+            <Link href="/">
+              <h1 className="text-2xl font-bold text-[#EEE9DA]">Vanilla Sudoku</h1>
+            </Link>
             <img
               src="/images/vs-icon.png"
               alt="Vanilla Sudoku icon"
@@ -34,10 +36,11 @@ export default function Header() {
           {/* Right side: Nav links for desktop */}
           <nav className="hidden sm:flex space-x-6 text-[#EEE9DA]">
           {[
-            { href: "/", label: "Home" },
             { href: "/puzzles", label: "Puzzles" },
+            { href: "/create", label: "Create & Share" },
             { href: "/videos", label: "Videos" },
             { href: "/about", label: "About" },
+            { href: "/", label: "Home" },
           ].map(({ href, label }) => (
             <Link
               key={href}

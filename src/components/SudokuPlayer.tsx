@@ -420,15 +420,18 @@ export default function SudokuPlayer({ puzzle, clues, solution, youtubeId, custo
             >
               Reset
             </button>
-            <button
-              onClick={handleCheck}
-              className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
-            >
-              Check
-            </button>
+
+            {solution && (
+              <button
+                onClick={handleCheck}
+                className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
+              >
+                Check
+              </button>
+            )}
             <button
               onClick={handleShare}
-              className="px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
+              className="hidden md:block px-6 py-2 rounded-lg bg-[#6096B4] text-[#EEE9DA] font-semibold shadow hover:brightness-110 transition"
             >
               Share
             </button>
