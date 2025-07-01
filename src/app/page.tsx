@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Home() {
   return (
@@ -55,6 +56,26 @@ export default function Home() {
       <div className="flex justify-center mt-6 mb-12">
         <div className="w-[90%] md:w-[75%] space-y-6">
           { /* news stuff things */ }
+
+          { /* text only thing */ }
+          <div className="bg-white border border-[#333333] rounded p-4 mb-4 shadow-sm">
+            <h2 className="text-lg font-semibold text-[#333333] mb-2">New Feature: Create & Share Puzzles!</h2>
+            <p className="text-[#333333] text-base leading-relaxed">
+              I have added a new feature to the site that allows for portable sudoku puzzles with state preservation. If you see a screenshot of a puzzle you&apos;d like to play, or maybe help someone else with that puzzle, you can use the new <Link className="vs-link" href="/create">Create & Share</Link> feature I&apos;ve added to do just that.<br /><br />Create the puzzle, save it, mess around with it, and then share it. Sharing a puzzle will retain the entire state of the original puzzle, the numbers you put in yourself, and even hints! You could even use it to play a puzzle on one computer and then shoot yourself the link and pick up your puzzle where you left off on another computer. <i>This feature only works for desktop and custom or shared puzzles cannot be verified with the Check button.</i><br /><br /><Link className="vs-link" href="/create">Give it a whirl today</Link>!
+            </p>
+            <div className="hidden md:block flex justify-center my-4">
+              <Link className="vs-link" href="/create">
+                <Image
+                  src="/images/create-play-share.jpg"
+                  alt="Create & Share Vanilla Sudoku Feature"
+                  width={1920}
+                  height={1080}
+                  className="rounded shadow"
+                />
+              </Link>
+            </div>
+            <p className="text-sm text-[#666] mt-2">Jul 1, 2025</p>
+          </div>
 
           { /* embedded thing */ }
           <div className="bg-white border border-[#333333] rounded p-4 mb-4 shadow-sm flex flex-col md:flex-row gap-4">
