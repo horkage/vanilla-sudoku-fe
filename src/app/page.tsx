@@ -17,9 +17,11 @@ export default function Home() {
 
           {/* Foreground Content */}
           <div className="relative z-20 text-[#333333]">
-            <h1 className="text-xl md:text-2xl font-bold mb-4 tracking-wide border-b border-[#CCC]">Old Fashioned Sudoku Puzzles</h1>
+            <h1 className="text-xl md:text-2xl font-bold mb-4 tracking-wide border-b border-[#CCC]">The Quiet Joy of Natural Logic and Discovery</h1>
             <div className="text-base md:text-lg leading-relaxed">
-              I didn&apos;t even know what sudoku was until a couple of years ago. I started puttering at it in some puzzle books and found that I started to really like the game a lot, and, now I&apos;m making my own puzzles. I believe that there could very well be a hidden sudoku player within you that you just haven&apos;t met yet - because that&apos;s what happened with me.<br /><br />My hope is that I can shine you on to sudoku if you&apos;re new to it, and hopefully show things from a different, yet useful perspective to veterans as well.<br /><br /><Link className="vs-link" href="/puzzles">All of my puzzles</Link> are home-made and are designed to be enjoyed the way I enjoy sudoku: with minimal digital fuss and a nod towards analog play. Here, watch this thing:
+              My puzzles are home-made and crafted to be enjoyed through simple, natural progression. You won&apos;t need to pencil in every hint or chase after arcane patterns &mdash; though you&apos;re always free to do so if you wish!
+
+              Here, puzzles unfold at their own pace. And if you listen closely, they&apos;ll tell you exactly how to solve them.
               <br />
 
               <div className="mt-4 flex justify-center">
