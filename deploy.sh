@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# ain't much in here a determined hacker couldn't suss out anyway.
+# No passwords, API keys, or anything else egregiously sensitive.
+
 set -e
 PROJECT_NAME=vanilla-sudoku
 BUILD_DIR=${PROJECT_NAME}
