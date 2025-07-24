@@ -19,9 +19,9 @@ export default function Home() {
           <div className="relative z-20 text-[#333333]">
             <h1 className="text-xl md:text-2xl font-bold mb-4 tracking-wide border-b border-[#CCC]">The Quiet Joy of Natural Logic and Discovery</h1>
             <div className="text-base md:text-lg leading-relaxed">
-              My puzzles are home-made and crafted to be enjoyed through simple, natural progression. You won&apos;t need to pencil in every hint or chase after arcane patterns &mdash; though you&apos;re always free to do so if you wish!
-
-              Here, puzzles unfold at their own pace. And if you listen closely, they&apos;ll tell you exactly how to solve them.
+              My puzzles are home-made and crafted to be enjoyed through simple, natural progression. You certainly can look for arcane patterns in my puzzles if you so desire - I certainly won&apos;t stop you - but my puzzles are better suited for a more relaxed and laid-back solving approach.
+              <br />
+              <br />Play however you like, because here, puzzles unfold at their own pace - no one is timing you and no one is judging you. Just be sure to unplug from time to time, and listen closely to these puzzles - they just might tell you how to solve them. With minimal fuss, of course.
               <br />
 
               <div className="mt-4 flex justify-center">
@@ -58,6 +58,30 @@ export default function Home() {
       <div className="flex justify-center mt-6 mb-12">
         <div className="w-[90%] md:w-[75%] space-y-6">
           { /* news stuff things */ }
+
+          { /* embedded thing */ }
+          <div className="bg-white border border-[#333333] rounded p-4 mb-4 shadow-sm flex flex-col md:flex-row gap-4">
+            <div className="w-full md:w-1/3">
+              <iframe
+                className="w-full aspect-video rounded"
+                src="https://www.youtube.com/embed/fpXYvVYbNEY"
+                title="YouTube video"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+            <div className="flex-1">
+              <h2 className="text-lg font-semibold text-[#333333] mb-2">New Video: Medium Puzzle (0001) Walkthrough</h2>
+              <p className="text-[#333333] text-base leading-relaxed">
+                I&apos;m slowly trying to backfill video walkthroughs for my curated puzzles, and the next walktrhough video is for my first solvable <Link className="vs-link" href="/puzzles/medium/puzzle/0001">Medium Difficulty Puzzle (0001)</Link> I made. I take a quicker, but more natural approach to solving this puzzle and managed to get its runtime down to about 18 minutes. Not bad!
+                <br />
+                <br />
+                You can play this very puzzle along with me <Link className="vs-link" href="/puzzles/medium/puzzle/0001">right here</Link>. Bonus points if you spot my mistakes and fix them yourself!
+              </p>
+              <p className="text-sm text-[#666] mt-2">Jul 23, 2025</p>
+            </div>
+          </div>
 
           { /* text only thing */ }
           <div className="bg-white border border-[#333333] rounded p-4 mb-4 shadow-sm">
