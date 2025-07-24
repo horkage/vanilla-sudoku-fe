@@ -1,36 +1,57 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Vanilla Sudoku Front-End
+
+A clean, traditional Sudoku experience built to make puzzles feel **approachable for anyone at any skill level**, using a blend of **digital minimalism** and **natural puzzle progression**. Puzzles have accompanying walkthrough videos to help approachability of the game to everyone.
+
+This is the front-end client for *Vanilla Sudoku*, designed with a focus on simplicity, responsiveness, and intuitive gameplay, with a tight focus on mobile device UI/UX.
+
+[Live Demo →](https://vanilla-sudoku.com)
+[GitHub Repo →](https://github.com/horkage/vanilla-sudoku-fe)
+[YouTube Walkthroughs →](https://www.youtube.com/channel/UCW9YYOpYh2W_HXqvHjG0l0A)
+
+---
+
+## Features
+
+- **Minimal UI** puzzle input can work entirely with a keyboard or without, or even both should you like
+- **Responsive layout** tuned for mobile and desktop
+- **Narration tool** for highlighting logic during solving (not advertized, but it is there)
+- **Sharable puzzle states** via custom URL codec
+- Built with a focus on **visual clarity** and **natural play flow**
+
+## Narration Mode
+- If, for whatever reason, you'd like to use the Narration Tool, access it by hitting "n" on your keyboard. This drops you into Narration Mode and other keyboard inputs become available. "b", "r", and "c" change highlight mode to Box, Row, and Column respectively. The arrow keys work as you'd expect, left/right/up/down to move the box/row/colum highlight. Narration Mode also allows right-click to place red Xs on the grid. In addition to this, it allows you to highlight any number with a left-mouse click - either numbers you have placed or original number clues. Narration Mode also works on all shared/custom puzzles.
+
+---
+
+## Tech Stack
+
+- [Next.js 14 App Router](https://nextjs.org/docs/app)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Tailwind CSS](https://tailwindcss.com/)
+
+---
+
+Author
+Michael Wood
+GitHub: @horkage
+
+---
+
+License
+This project is open source under the MIT License.
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# Clone the repo
+git clone https://github.com/horkage/vanilla-sudoku-fe.git
+
+# Navigate into the project folder
+cd vanilla-sudoku-fe
+
+# Install dependencies
+npm install
+
+# Start the dev server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
