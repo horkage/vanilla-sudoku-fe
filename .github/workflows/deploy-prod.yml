@@ -25,13 +25,13 @@ jobs:
           # Remove build artifacts if they exist
           rm -rf .next node_modules
           
-          # Create archive
-          tar -czf vanilla-sudoku.tar.gz \
+          # Create archive (ignore warnings about files changing)
+          tar --warning=no-file-changed -czf vanilla-sudoku.tar.gz \
             --exclude='.git' \
             --exclude='.github' \
             --exclude='node_modules' \
             --exclude='.next' \
-            .
+            . || if [ $? -eq 1 ]; then exit 0; else exit $?; fi
 
       - name: Upload to server
         run: |
