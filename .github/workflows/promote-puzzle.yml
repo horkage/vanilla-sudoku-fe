@@ -1,0 +1,140 @@
+name: Promote Puzzle to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_id:
+        description: 'Candidate puzzle ID (e.g., 001, 002)'
+        required: true
+        type: string
+      difficulty:
+        description: 'Target difficulty level'
+        required: true
+        type: choice
+        options:
+          - easy
+          - medium
+          - hard
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout candidate branch
+        uses: actions/checkout@v4
+        with:
+          ref: candidate
+          fetch-depth: 0
+
+      - name: Setup Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Find next available puzzle ID
+        id: next_id
+        run: |
+          DIFFICULTY="${{ inputs.difficulty }}"
+          
+          # Find the highest numbered puzzle file in the target difficulty
+          LAST_ID=$(ls puzzle-data/$DIFFICULTY/*.puzzle 2>/dev/null | \
+            sed 's/.*\/\([0-9]*\)\.puzzle/\1/' | \
+            sort -n | \
+            tail -1 || echo "0000")
+          
+          # Increment to get next ID
+          NEXT_NUM=$((10#$LAST_ID + 1))
+          NEXT_ID=$(printf "%04d" $NEXT_NUM)
+          
+          echo "next_id=$NEXT_ID" >> $GITHUB_OUTPUT
+          echo "📝 Next available ID in $DIFFICULTY: $NEXT_ID"
+
+      - name: Promote puzzle files
+        run: |
+          CANDIDATE_ID="${{ inputs.candidate_id }}"
+          DIFFICULTY="${{ inputs.difficulty }}"
+          NEXT_ID="${{ steps.next_id.outputs.next_id }}"
+          
+          # Ensure candidate files exist
+          if [ ! -f "puzzle-data/candidate/${CANDIDATE_ID}.puzzle" ]; then
+            echo "❌ Error: puzzle-data/candidate/${CANDIDATE_ID}.puzzle not found"
+            exit 1
+          fi
+          
+          if [ ! -f "puzzle-data/candidate/${CANDIDATE_ID}.grid" ]; then
+            echo "❌ Error: puzzle-data/candidate/${CANDIDATE_ID}.grid not found"
+            exit 1
+          fi
+          
+          # Copy files to target difficulty with new ID
+          cp "puzzle-data/candidate/${CANDIDATE_ID}.puzzle" "puzzle-data/$DIFFICULTY/${NEXT_ID}.puzzle"
+          cp "puzzle-data/candidate/${CANDIDATE_ID}.grid" "puzzle-data/$DIFFICULTY/${NEXT_ID}.grid"
+          
+          # Copy optional metadata if it exists
+          if [ -f "puzzle-data/candidate/${CANDIDATE_ID}.metadata.json" ]; then
+            cp "puzzle-data/candidate/${CANDIDATE_ID}.metadata.json" "puzzle-data/$DIFFICULTY/${NEXT_ID}.metadata.json"
+          fi
+          
+          # Copy optional youtube ID if it exists
+          if [ -f "puzzle-data/candidate/${CANDIDATE_ID}.youtube" ]; then
+            cp "puzzle-data/candidate/${CANDIDATE_ID}.youtube" "puzzle-data/$DIFFICULTY/${NEXT_ID}.youtube"
+          fi
+          
+          echo "✅ Promoted candidate ${CANDIDATE_ID} to $DIFFICULTY/${NEXT_ID}"
+
+      - name: Commit to main branch
+        run: |
+          DIFFICULTY="${{ inputs.difficulty }}"
+          NEXT_ID="${{ steps.next_id.outputs.next_id }}"
+          CANDIDATE_ID="${{ inputs.candidate_id }}"
+          
+          # Switch to main branch
+          git fetch origin main
+          git checkout main
+          
+          # Copy promoted files
+          cp "puzzle-data/$DIFFICULTY/${NEXT_ID}.puzzle" "../temp_${NEXT_ID}.puzzle"
+          cp "puzzle-data/$DIFFICULTY/${NEXT_ID}.grid" "../temp_${NEXT_ID}.grid"
+          
+          # Copy optional files if they exist
+          [ -f "puzzle-data/$DIFFICULTY/${NEXT_ID}.metadata.json" ] && \
+            cp "puzzle-data/$DIFFICULTY/${NEXT_ID}.metadata.json" "../temp_${NEXT_ID}.metadata.json"
+          [ -f "puzzle-data/$DIFFICULTY/${NEXT_ID}.youtube" ] && \
+            cp "puzzle-data/$DIFFICULTY/${NEXT_ID}.youtube" "../temp_${NEXT_ID}.youtube"
+          
+          # Move files to main branch
+          mv "../temp_${NEXT_ID}.puzzle" "puzzle-data/$DIFFICULTY/${NEXT_ID}.puzzle"
+          mv "../temp_${NEXT_ID}.grid" "puzzle-data/$DIFFICULTY/${NEXT_ID}.grid"
+          
+          [ -f "../temp_${NEXT_ID}.metadata.json" ] && \
+            mv "../temp_${NEXT_ID}.metadata.json" "puzzle-data/$DIFFICULTY/${NEXT_ID}.metadata.json"
+          [ -f "../temp_${NEXT_ID}.youtube" ] && \
+            mv "../temp_${NEXT_ID}.youtube" "puzzle-data/$DIFFICULTY/${NEXT_ID}.youtube"
+          
+          # Commit and push
+          git add puzzle-data/$DIFFICULTY/
+          git commit -m "Promote candidate puzzle ${CANDIDATE_ID} to $DIFFICULTY as ${NEXT_ID}"
+          git push origin main
+          
+          echo "🚀 Pushed to main - production deployment triggered!"
+
+      - name: Cleanup candidate on candidate branch
+        run: |
+          CANDIDATE_ID="${{ inputs.candidate_id }}"
+          
+          # Switch back to candidate branch
+          git checkout candidate
+          
+          # Remove promoted puzzle from candidates
+          rm -f "puzzle-data/candidate/${CANDIDATE_ID}.puzzle"
+          rm -f "puzzle-data/candidate/${CANDIDATE_ID}.grid"
+          rm -f "puzzle-data/candidate/${CANDIDATE_ID}.metadata.json"
+          rm -f "puzzle-data/candidate/${CANDIDATE_ID}.youtube"
+          
+          # Commit and push
+          git add puzzle-data/candidate/
+          git commit -m "Remove promoted candidate ${CANDIDATE_ID}" || echo "No changes to commit"
+          git push origin candidate || echo "Nothing to push"
+          
+          echo "🧹 Cleaned up candidate ${CANDIDATE_ID}"
