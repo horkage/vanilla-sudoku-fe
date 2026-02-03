@@ -1,0 +1,53 @@
+name: Reject Candidate Puzzle
+
+on:
+  workflow_dispatch:
+    inputs:
+      candidate_id:
+        description: 'Candidate puzzle ID to reject (e.g., 001, 002)'
+        required: true
+        type: string
+
+jobs:
+  reject:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout candidate branch
+        uses: actions/checkout@v4
+        with:
+          ref: candidate
+
+      - name: Setup Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Remove candidate puzzle
+        run: |
+          CANDIDATE_ID="${{ inputs.candidate_id }}"
+          
+          # Check if puzzle exists
+          if [ ! -f "puzzle-data/candidate/${CANDIDATE_ID}.puzzle" ] && \
+             [ ! -f "puzzle-data/candidate/${CANDIDATE_ID}.grid" ]; then
+            echo "❌ Error: Candidate ${CANDIDATE_ID} not found"
+            exit 1
+          fi
+          
+          # Remove all files for this candidate
+          rm -f "puzzle-data/candidate/${CANDIDATE_ID}.puzzle"
+          rm -f "puzzle-data/candidate/${CANDIDATE_ID}.grid"
+          rm -f "puzzle-data/candidate/${CANDIDATE_ID}.metadata.json"
+          rm -f "puzzle-data/candidate/${CANDIDATE_ID}.youtube"
+          
+          echo "🗑️ Removed candidate puzzle ${CANDIDATE_ID}"
+
+      - name: Commit and push
+        run: |
+          CANDIDATE_ID="${{ inputs.candidate_id }}"
+          
+          git add puzzle-data/candidate/
+          git commit -m "Reject candidate puzzle ${CANDIDATE_ID}"
+          git push origin candidate
+          
+          echo "✅ Candidate ${CANDIDATE_ID} rejected and removed"
