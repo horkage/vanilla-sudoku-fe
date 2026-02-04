@@ -42,3 +42,6 @@ next-env.d.ts
 
 # vim
 *.swp
+
+# puzzle generator tools (local only)
+/tools/
