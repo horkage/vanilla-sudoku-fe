@@ -11,7 +11,8 @@
     "generate:sitemap": "node generate-sitemap.js",
     "generate:candidates": "node tools/pipelineRunner.js --count=5 --batch=500",
     "generate:candidates:quick": "node tools/pipelineRunner.js --count=1 --batch=100 --skip-postprocess",
-    "generate:candidates:batch": "node tools/pipelineRunner.js --count=10 --batch=1000"
+    "generate:candidates:batch": "node tools/pipelineRunner.js --count=10 --batch=1000",
+    "next-puzzle": "node nextPuzzle.js"
   },
   "dependencies": {
     "clsx": "2.1.1",

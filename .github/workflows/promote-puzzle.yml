@@ -3,10 +3,6 @@ name: Promote Puzzle to Production
 on:
   workflow_dispatch:
     inputs:
-      candidate_id:
-        description: 'Candidate puzzle ID (e.g., 001, 002)'
-        required: true
-        type: string
       difficulty:
         description: 'Target difficulty level'
         required: true
@@ -52,13 +48,13 @@ jobs:
 
       - name: Promote puzzle files
         run: |
-          CANDIDATE_ID="${{ inputs.candidate_id }}"
+          CANDIDATE_ID="001"
           DIFFICULTY="${{ inputs.difficulty }}"
           NEXT_ID="${{ steps.next_id.outputs.next_id }}"
           
           # Ensure candidate files exist
           if [ ! -f "puzzle-data/candidate/${CANDIDATE_ID}.puzzle" ]; then
-            echo "❌ Error: puzzle-data/candidate/${CANDIDATE_ID}.puzzle not found"
+            echo "❌ Error: No candidate puzzle in slot 001"
             exit 1
           fi
           
@@ -121,12 +117,12 @@ jobs:
 
       - name: Cleanup candidate on candidate branch
         run: |
-          CANDIDATE_ID="${{ inputs.candidate_id }}"
+          CANDIDATE_ID="001"
           
           # Switch back to candidate branch
           git checkout candidate
           
-          # Remove promoted puzzle from candidates
+          # Remove promoted puzzle from slot 001
           rm -f "puzzle-data/candidate/${CANDIDATE_ID}.puzzle"
           rm -f "puzzle-data/candidate/${CANDIDATE_ID}.grid"
           rm -f "puzzle-data/candidate/${CANDIDATE_ID}.metadata.json"
@@ -134,7 +130,7 @@ jobs:
           
           # Commit and push
           git add puzzle-data/candidate/
-          git commit -m "Remove promoted candidate ${CANDIDATE_ID}" || echo "No changes to commit"
+          git commit -m "Clear candidate slot after promoting to ${DIFFICULTY}" || echo "No changes to commit"
           git push origin candidate || echo "Nothing to push"
           
-          echo "🧹 Cleaned up candidate ${CANDIDATE_ID}"
+          echo "🧹 Cleared candidate slot 001"
