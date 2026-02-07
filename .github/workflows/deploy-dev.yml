@@ -1,0 +1,103 @@
+name: Deploy to Development
+
+on:
+  push:
+    branches:
+      - candidate
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEV_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.DEV_SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Create deployment archive
+        run: |
+          # Remove build artifacts if they exist
+          rm -rf .next node_modules
+          
+          # Create archive (ignore warnings about files changing)
+          tar --warning=no-file-changed -czf vanilla-sudoku.tar.gz \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='node_modules' \
+            --exclude='.next' \
+            . || if [ $? -eq 1 ]; then exit 0; else exit $?; fi
+
+      - name: Upload to server
+        run: |
+          scp -i ~/.ssh/deploy_key vanilla-sudoku.tar.gz ${{ secrets.DEV_SSH_USER }}@${{ secrets.DEV_SSH_HOST }}:/home/ubuntu/
+
+      - name: Deploy on server
+        run: |
+          ssh -i ~/.ssh/deploy_key ${{ secrets.DEV_SSH_USER }}@${{ secrets.DEV_SSH_HOST }} << 'EOF'
+            set -e
+            
+            # Source NVM
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            nvm use 20 || export PATH="$HOME/.nvm/versions/node/v20.19.2/bin:$PATH"
+            
+            BUILD_DIR=vanilla-sudoku
+            
+            # Backup current version
+            if [ -d "$BUILD_DIR" ]; then
+              TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+              cp -rip $BUILD_DIR ${BUILD_DIR}_backup_$TIMESTAMP
+              echo "🔄 Backup created: ${BUILD_DIR}_backup_$TIMESTAMP"
+            fi
+            
+            # Extract new version
+            rm -rf $BUILD_DIR
+            mkdir $BUILD_DIR
+            tar -xzf vanilla-sudoku.tar.gz -C $BUILD_DIR
+            
+            # Build
+            cd $BUILD_DIR
+            npm install
+            
+            if npm run build; then
+              echo "✅ Build succeeded"
+              
+              # Check if PM2 process exists
+              if pm2 describe sudoku > /dev/null 2>&1; then
+                pm2 restart sudoku
+                echo "🔄 PM2 process restarted"
+              else
+                PORT=3000 pm2 start npm --name sudoku -- start -- -H 0.0.0.0
+                pm2 save
+                echo "🚀 PM2 process started"
+              fi
+            else
+              echo "❌ Build failed. Reverting..."
+              cd ..
+              rm -rf $BUILD_DIR
+              LATEST_BACKUP=$(ls -td ${BUILD_DIR}_backup_* 2>/dev/null | head -1)
+              if [ -n "$LATEST_BACKUP" ]; then
+                mv $LATEST_BACKUP $BUILD_DIR
+                echo "🔁 Rolled back to $LATEST_BACKUP"
+                pm2 restart sudoku || true
+              else
+                echo "⚠️ No backup found to revert to!"
+              fi
+              exit 1
+            fi
+            
+            # Cleanup
+            rm -f /home/ubuntu/vanilla-sudoku.tar.gz
+          EOF
+
+      - name: Cleanup
+        if: always()
+        run: |
+          rm -f ~/.ssh/deploy_key
+          rm -f vanilla-sudoku.tar.gz
