@@ -92,7 +92,11 @@ jobs:
               exit 1
             fi
             
-            # Cleanup
+            # Cleanup old backups (keep only 2 most recent)
+            cd /home/ubuntu
+            ls -td ${BUILD_DIR}_backup_* 2>/dev/null | tail -n +3 | xargs rm -rf
+            
+            # Cleanup tarball
             rm -f /home/ubuntu/vanilla-sudoku.tar.gz
           EOF
 
