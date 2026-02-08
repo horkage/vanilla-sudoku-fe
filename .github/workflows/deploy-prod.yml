@@ -107,8 +107,8 @@ jobs:
             PUZZLE_ID=$(echo "$COMMIT_MSG" | sed -n 's/.*as \([0-9]*\)/\1/p')
             
             if [ -n "$DIFFICULTY" ] && [ -n "$PUZZLE_ID" ]; then
-              # Remove leading zeros for display
-              DISPLAY_ID=$((10#$PUZZLE_ID))
+              # Remove leading zeros for display number only
+              DISPLAY_NUM=$((10#$PUZZLE_ID))
               
               # Capitalize difficulty
               DIFFICULTY_CAP=$(echo "$DIFFICULTY" | sed 's/\b\(.\)/\u\1/')
@@ -122,9 +122,9 @@ jobs:
               DID=$(echo "$SESSION_RESPONSE" | jq -r '.did')
               
               if [ "$ACCESS_TOKEN" != "null" ] && [ -n "$ACCESS_TOKEN" ]; then
-                # Create post with embedded link card
-                PUZZLE_URL="https://vanilla-sudoku.com/puzzles/$DIFFICULTY/puzzle/$DISPLAY_ID"
-                POST_TEXT="New Vanilla Sudoku puzzle #$DISPLAY_ID ($DIFFICULTY_CAP) $PUZZLE_URL"
+                # Create post with embedded link card (keep padded ID in URL)
+                PUZZLE_URL="https://vanilla-sudoku.com/puzzles/$DIFFICULTY/puzzle/$PUZZLE_ID"
+                POST_TEXT="New Vanilla Sudoku puzzle #$DISPLAY_NUM ($DIFFICULTY_CAP) $PUZZLE_URL"
                 
                 # Create the post
                 curl -s -X POST https://bsky.social/xrpc/com.atproto.repo.createRecord \
