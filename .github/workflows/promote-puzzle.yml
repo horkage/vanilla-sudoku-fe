@@ -12,6 +12,9 @@ on:
           - medium
           - hard
 
+permissions:
+  contents: write
+
 jobs:
   promote:
     runs-on: ubuntu-latest
