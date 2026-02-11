@@ -41,7 +41,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full">
-      <body className="flex flex-col min-h-screen bg-neutral-100 text-gray-800 m-0 p-0">
+      <body className="flex flex-col min-h-screen bg-[#EEE9DA] text-gray-800 m-0 p-0">
         <div className="relative">
           <Header />
         </div>

@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function Home() {
   return (
-    <main className="bg-[#EEE9DA]">
+    <div>
       <div className="flex justify-center items-start">
         <div className="relative w-[90%] md:w-[75%] mt-3 p-6 overflow-hidden border border-[#333333] rounded bg-white">
           {/* Background Image */}
@@ -220,6 +220,6 @@ export default function Home() {
 
         </div>
       </div>
-    </main>
+    </div>
   );
 }

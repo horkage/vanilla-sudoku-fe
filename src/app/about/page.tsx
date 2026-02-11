@@ -5,7 +5,7 @@ export const metadata = {
 
 export default function About() {
   return (
-    <main className="bg-[#EEE9DA]">
+    <div>
       <div className="flex justify-center items-start">
         <div className="relative w-[90%] md:w-[75%] mt-3 p-6 overflow-hidden border border-[#333333] rounded bg-white">
           <h1 className="text-xl md:text-2xl font-bold mb-4 tracking-wide border-b border-[#CCC]">About</h1>
@@ -26,6 +26,6 @@ export default function About() {
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

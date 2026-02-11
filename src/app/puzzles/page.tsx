@@ -5,7 +5,7 @@ export const metadata = {
 
 export default function PuzzlesLanding() {
   return (
-    <main className="bg-[#EEE9DA] flex justify-center items-start pt-10">
+    <div className="flex justify-center items-start pt-10">
       <div className="w-[90%] md:w-[75%] space-y-6">
         <h1 className="text-2xl font-semibold text-[#333333] mb-4 text-center">
           Choose Your Puzzle Difficulty
@@ -25,6 +25,6 @@ export default function PuzzlesLanding() {
           ))}
         </div>
       </div>
-    </main>
+    </div>
   );
 }

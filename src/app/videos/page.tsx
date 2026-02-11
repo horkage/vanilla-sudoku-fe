@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function Videos() {
   return (
-    <main className="bg-[#EEE9DA] min-h-screen py-8">
+    <div className="min-h-screen py-8">
       <div className="flex flex-col items-center space-y-6">
         <div className="relative w-[90%] md:w-[75%] p-6 overflow-hidden border border-[#333333] rounded bg-white shadow">
           <h1 className="text-xl md:text-2xl font-bold mb-4 tracking-wide border-b border-[#CCC]">
@@ -209,6 +209,6 @@ export default function Videos() {
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

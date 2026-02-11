@@ -26,7 +26,7 @@ function InnerCustomPage() {
   );
 
   return (
-    <main className="bg-[#EEE9DA] flex justify-center">
+    <div className="flex justify-center">
       <div className="w-[95%] md:w-[75%] mt-4">
         <h1 className="text-2xl font-semibold text-[#333333] mb-2 text-center">Custom Puzzle</h1>
         <SudokuPlayer puzzle={puzzle} clues={data.clues} customHints={data.hints} />

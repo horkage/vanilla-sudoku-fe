@@ -38,7 +38,7 @@ export default async function DifficultyIndexPage({
     .sort((a, b) => b.localeCompare(a)); // Reverse alphanumeric
 
   return (
-    <main className="bg-[#EEE9DA] flex justify-center">
+    <div className="flex justify-center">
       <div className="w-[90%] md:w-[75%] mt-4 p-6 bg-white border border-[#333333] rounded shadow-sm items-center">
         <h1 className="text-2xl font-semibold text-[#333333] text-center mb-2">{difficulty.charAt(0).toUpperCase()}{difficulty.slice(1)} Puzzles</h1>
 
@@ -62,6 +62,6 @@ export default async function DifficultyIndexPage({
           })}
         </ul>
       </div>
-    </main>
+    </div>
   );
 }

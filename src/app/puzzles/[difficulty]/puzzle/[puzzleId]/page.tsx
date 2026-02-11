@@ -89,12 +89,12 @@ export default async function PuzzlePage({
     }
 
     return (
-      <main className="bg-[#EEE9DA] flex justify-center">
+      <div className="flex justify-center">
         <div className="w-[95%] md:w-[75%] mt-4">
           <h1 className="text-2xl font-semibold text-[#333333] mb-2 text-center">{difficulty.charAt(0).toUpperCase()}{difficulty.slice(1)} Puzzle: {puzzleId}</h1>
           <SudokuPlayer puzzle={puzzle} clues={clues} solution={solution} youtubeId={youtubeId} />
         </div>
-      </main>
+      </div>
     );
   } catch {
     return notFound();
