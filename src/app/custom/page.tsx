@@ -31,7 +31,7 @@ function InnerCustomPage() {
         <h1 className="text-2xl font-semibold text-[#333333] mb-2 text-center">Custom Puzzle</h1>
         <SudokuPlayer puzzle={puzzle} clues={data.clues} customHints={data.hints} />
       </div>
-    </main>
+    </div>
   );
 
 }
