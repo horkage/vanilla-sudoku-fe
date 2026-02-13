@@ -50,7 +50,7 @@ jobs:
           echo "next_id=$NEXT_ID" >> $GITHUB_OUTPUT
           echo "📝 Next available ID in $DIFFICULTY: $NEXT_ID"
 
-      - name: Promote puzzle files
+      - name: Prepare puzzle files for promotion
         run: |
           CANDIDATE_ID="001"
           DIFFICULTY="${{ inputs.difficulty }}"
@@ -67,21 +67,21 @@ jobs:
             exit 1
           fi
           
-          # Copy files to target difficulty with new ID
-          cp "puzzle-data/candidate/${CANDIDATE_ID}.puzzle" "puzzle-data/$DIFFICULTY/${NEXT_ID}.puzzle"
-          cp "puzzle-data/candidate/${CANDIDATE_ID}.grid" "puzzle-data/$DIFFICULTY/${NEXT_ID}.grid"
+          # Copy files to temporary location (outside git tree)
+          cp "puzzle-data/candidate/${CANDIDATE_ID}.puzzle" "/tmp/promo_${NEXT_ID}.puzzle"
+          cp "puzzle-data/candidate/${CANDIDATE_ID}.grid" "/tmp/promo_${NEXT_ID}.grid"
           
           # Copy optional metadata if it exists
           if [ -f "puzzle-data/candidate/${CANDIDATE_ID}.metadata.json" ]; then
-            cp "puzzle-data/candidate/${CANDIDATE_ID}.metadata.json" "puzzle-data/$DIFFICULTY/${NEXT_ID}.metadata.json"
+            cp "puzzle-data/candidate/${CANDIDATE_ID}.metadata.json" "/tmp/promo_${NEXT_ID}.metadata.json"
           fi
           
           # Copy optional youtube ID if it exists
           if [ -f "puzzle-data/candidate/${CANDIDATE_ID}.youtube" ]; then
-            cp "puzzle-data/candidate/${CANDIDATE_ID}.youtube" "puzzle-data/$DIFFICULTY/${NEXT_ID}.youtube"
+            cp "puzzle-data/candidate/${CANDIDATE_ID}.youtube" "/tmp/promo_${NEXT_ID}.youtube"
           fi
           
-          echo "✅ Promoted candidate ${CANDIDATE_ID} to $DIFFICULTY/${NEXT_ID}"
+          echo "✅ Prepared candidate ${CANDIDATE_ID} for promotion to $DIFFICULTY/${NEXT_ID}"
 
       - name: Commit to main branch
         run: |
@@ -93,24 +93,15 @@ jobs:
           git fetch origin main
           git checkout main
           
-          # Copy promoted files
-          cp "puzzle-data/$DIFFICULTY/${NEXT_ID}.puzzle" "../temp_${NEXT_ID}.puzzle"
-          cp "puzzle-data/$DIFFICULTY/${NEXT_ID}.grid" "../temp_${NEXT_ID}.grid"
+          # Copy promoted files from temp location
+          cp "/tmp/promo_${NEXT_ID}.puzzle" "puzzle-data/$DIFFICULTY/${NEXT_ID}.puzzle"
+          cp "/tmp/promo_${NEXT_ID}.grid" "puzzle-data/$DIFFICULTY/${NEXT_ID}.grid"
           
           # Copy optional files if they exist
-          [ -f "puzzle-data/$DIFFICULTY/${NEXT_ID}.metadata.json" ] && \
-            cp "puzzle-data/$DIFFICULTY/${NEXT_ID}.metadata.json" "../temp_${NEXT_ID}.metadata.json"
-          [ -f "puzzle-data/$DIFFICULTY/${NEXT_ID}.youtube" ] && \
-            cp "puzzle-data/$DIFFICULTY/${NEXT_ID}.youtube" "../temp_${NEXT_ID}.youtube"
-          
-          # Move files to main branch
-          mv "../temp_${NEXT_ID}.puzzle" "puzzle-data/$DIFFICULTY/${NEXT_ID}.puzzle"
-          mv "../temp_${NEXT_ID}.grid" "puzzle-data/$DIFFICULTY/${NEXT_ID}.grid"
-          
-          [ -f "../temp_${NEXT_ID}.metadata.json" ] && \
-            mv "../temp_${NEXT_ID}.metadata.json" "puzzle-data/$DIFFICULTY/${NEXT_ID}.metadata.json"
-          [ -f "../temp_${NEXT_ID}.youtube" ] && \
-            mv "../temp_${NEXT_ID}.youtube" "puzzle-data/$DIFFICULTY/${NEXT_ID}.youtube"
+          [ -f "/tmp/promo_${NEXT_ID}.metadata.json" ] && \
+            cp "/tmp/promo_${NEXT_ID}.metadata.json" "puzzle-data/$DIFFICULTY/${NEXT_ID}.metadata.json"
+          [ -f "/tmp/promo_${NEXT_ID}.youtube" ] && \
+            cp "/tmp/promo_${NEXT_ID}.youtube" "puzzle-data/$DIFFICULTY/${NEXT_ID}.youtube"
           
           # Commit and push
           git add puzzle-data/$DIFFICULTY/
@@ -152,3 +143,13 @@ jobs:
           git push origin candidate || echo "Nothing to push"
           
           echo "🧹 Cleared candidate slot 001"
+
+      - name: Cleanup temporary files
+        if: always()
+        run: |
+          NEXT_ID="${{ steps.next_id.outputs.next_id }}"
+          rm -f "/tmp/promo_${NEXT_ID}.puzzle"
+          rm -f "/tmp/promo_${NEXT_ID}.grid"
+          rm -f "/tmp/promo_${NEXT_ID}.metadata.json"
+          rm -f "/tmp/promo_${NEXT_ID}.youtube"
+          echo "🧹 Cleaned up temporary promotion files"
