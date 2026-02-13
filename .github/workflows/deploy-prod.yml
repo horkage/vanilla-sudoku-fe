@@ -126,7 +126,13 @@ jobs:
                 PUZZLE_URL="https://vanilla-sudoku.com/puzzles/$DIFFICULTY/puzzle/$PUZZLE_ID"
                 POST_TEXT="New Vanilla Sudoku puzzle #$DISPLAY_NUM ($DIFFICULTY_CAP) $PUZZLE_URL"
                 
-                # Create the post
+                # Calculate byte positions for clickable link (facets)
+                # Text before URL
+                TEXT_BEFORE="New Vanilla Sudoku puzzle #$DISPLAY_NUM ($DIFFICULTY_CAP) "
+                BYTE_START=${#TEXT_BEFORE}
+                BYTE_END=$((BYTE_START + ${#PUZZLE_URL}))
+                
+                # Create the post with facets for clickable link
                 curl -s -X POST https://bsky.social/xrpc/com.atproto.repo.createRecord \
                   -H "Authorization: Bearer $ACCESS_TOKEN" \
                   -H "Content-Type: application/json" \
@@ -135,6 +141,20 @@ jobs:
                     \"collection\": \"app.bsky.feed.post\",
                     \"record\": {
                       \"text\": \"$POST_TEXT\",
+                      \"facets\": [
+                        {
+                          \"index\": {
+                            \"byteStart\": $BYTE_START,
+                            \"byteEnd\": $BYTE_END
+                          },
+                          \"features\": [
+                            {
+                              \"\$type\": \"app.bsky.richtext.facet#link\",
+                              \"uri\": \"$PUZZLE_URL\"
+                            }
+                          ]
+                        }
+                      ],
                       \"createdAt\": \"$(date -u +%Y-%m-%dT%H:%M:%S.000Z)\",
                       \"\$type\": \"app.bsky.feed.post\"
                     }
