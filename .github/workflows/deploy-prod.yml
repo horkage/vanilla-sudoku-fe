@@ -124,15 +124,24 @@ jobs:
               if [ "$ACCESS_TOKEN" != "null" ] && [ -n "$ACCESS_TOKEN" ]; then
                 # Create post with embedded link card (keep padded ID in URL)
                 PUZZLE_URL="https://vanilla-sudoku.com/puzzles/$DIFFICULTY/puzzle/$PUZZLE_ID"
-                POST_TEXT="New Vanilla Sudoku puzzle #$DISPLAY_NUM ($DIFFICULTY_CAP) $PUZZLE_URL"
+                POST_TEXT="Fresh puzzle from Vanilla Sudoku! 🧩 #$DISPLAY_NUM ($DIFFICULTY_CAP) - can you solve it? $PUZZLE_URL #Sudoku #LogicPuzzle"
                 
-                # Calculate byte positions for clickable link (facets)
-                # Text before URL
-                TEXT_BEFORE="New Vanilla Sudoku puzzle #$DISPLAY_NUM ($DIFFICULTY_CAP) "
-                BYTE_START=${#TEXT_BEFORE}
-                BYTE_END=$((BYTE_START + ${#PUZZLE_URL}))
+                # Calculate byte positions for clickable link and hashtags (facets)
+                # Use byte counting for proper Unicode handling (emoji is 4 bytes)
+                TEXT_BEFORE="Fresh puzzle from Vanilla Sudoku! 🧩 #$DISPLAY_NUM ($DIFFICULTY_CAP) - can you solve it? "
+                LINK_START=$(echo -n "$TEXT_BEFORE" | wc -c)
+                LINK_END=$((LINK_START + $(echo -n "$PUZZLE_URL" | wc -c)))
                 
-                # Create the post with facets for clickable link
+                # Hashtag positions
+                TEXT_BEFORE_SUDOKU="Fresh puzzle from Vanilla Sudoku! 🧩 #$DISPLAY_NUM ($DIFFICULTY_CAP) - can you solve it? $PUZZLE_URL "
+                SUDOKU_START=$(echo -n "$TEXT_BEFORE_SUDOKU" | wc -c)
+                SUDOKU_END=$((SUDOKU_START + 7))  # #Sudoku = 7 bytes
+                
+                TEXT_BEFORE_LOGIC="Fresh puzzle from Vanilla Sudoku! 🧩 #$DISPLAY_NUM ($DIFFICULTY_CAP) - can you solve it? $PUZZLE_URL #Sudoku "
+                LOGIC_START=$(echo -n "$TEXT_BEFORE_LOGIC" | wc -c)
+                LOGIC_END=$((LOGIC_START + 12))  # #LogicPuzzle = 12 bytes
+                
+                # Create the post with facets for clickable link and hashtags
                 curl -s -X POST https://bsky.social/xrpc/com.atproto.repo.createRecord \
                   -H "Authorization: Bearer $ACCESS_TOKEN" \
                   -H "Content-Type: application/json" \
@@ -144,13 +153,37 @@ jobs:
                       \"facets\": [
                         {
                           \"index\": {
-                            \"byteStart\": $BYTE_START,
-                            \"byteEnd\": $BYTE_END
+                            \"byteStart\": $LINK_START,
+                            \"byteEnd\": $LINK_END
                           },
                           \"features\": [
                             {
                               \"\$type\": \"app.bsky.richtext.facet#link\",
                               \"uri\": \"$PUZZLE_URL\"
+                            }
+                          ]
+                        },
+                        {
+                          \"index\": {
+                            \"byteStart\": $SUDOKU_START,
+                            \"byteEnd\": $SUDOKU_END
+                          },
+                          \"features\": [
+                            {
+                              \"\$type\": \"app.bsky.richtext.facet#tag\",
+                              \"tag\": \"Sudoku\"
+                            }
+                          ]
+                        },
+                        {
+                          \"index\": {
+                            \"byteStart\": $LOGIC_START,
+                            \"byteEnd\": $LOGIC_END
+                          },
+                          \"features\": [
+                            {
+                              \"\$type\": \"app.bsky.richtext.facet#tag\",
+                              \"tag\": \"LogicPuzzle\"
                             }
                           ]
                         }
