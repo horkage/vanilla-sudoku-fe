@@ -37,8 +37,12 @@ jobs:
         run: |
           DIFFICULTY="${{ inputs.difficulty }}"
           
-          # Find the highest numbered puzzle file in the target difficulty
-          LAST_ID=$(ls puzzle-data/$DIFFICULTY/*.puzzle 2>/dev/null | \
+          # Fetch main branch to check what puzzles exist there
+          git fetch origin main
+          
+          # Find the highest numbered puzzle file in the target difficulty on main branch
+          LAST_ID=$(git ls-tree -r --name-only origin/main puzzle-data/$DIFFICULTY/ | \
+            grep '\.puzzle$' | \
             sed 's/.*\/\([0-9]*\)\.puzzle/\1/' | \
             sort -n | \
             tail -1 || echo "0000")
@@ -48,6 +52,7 @@ jobs:
           NEXT_ID=$(printf "%04d" $NEXT_NUM)
           
           echo "next_id=$NEXT_ID" >> $GITHUB_OUTPUT
+          echo "📝 Last ID on main: $LAST_ID"
           echo "📝 Next available ID in $DIFFICULTY: $NEXT_ID"
 
       - name: Prepare puzzle files for promotion
