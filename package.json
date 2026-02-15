@@ -11,7 +11,9 @@
     "generate:sitemap": "node generate-sitemap.js",
     "generate:candidates": "node tools/pipelineRunner.js --count=5 --batch=500",
     "generate:candidates:quick": "node tools/pipelineRunner.js --count=1 --batch=100 --skip-postprocess",
-    "generate:candidates:batch": "node tools/pipelineRunner.js --count=10 --batch=1000"
+    "generate:candidates:batch": "node tools/pipelineRunner.js --count=10 --batch=1000",
+    "generate:screenshots": "node tools/generatePuzzleScreenshots.js",
+    "generate:screenshots:single": "node tools/generatePuzzleScreenshots.js --difficulty=easy --id=0001"
   },
   "dependencies": {
     "clsx": "2.1.1",
@@ -28,6 +30,7 @@
     "@types/react-dom": "19",
     "eslint": "9",
     "eslint-config-next": "15.3.2",
+    "playwright": "^1.58.2",
     "tailwindcss": "4.1.8",
     "typescript": "5"
   }
