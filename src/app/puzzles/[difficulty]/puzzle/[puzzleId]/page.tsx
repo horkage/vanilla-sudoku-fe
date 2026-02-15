@@ -13,6 +13,10 @@ export async function generateMetadata({
   const { difficulty, puzzleId } = await params;
   const difficultyString = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
 
+  // Puzzle preview image path
+  const previewImage = `/images/puzzles/${difficulty}/${puzzleId}.png`;
+  const previewImageUrl = `https://vanilla-sudoku.com${previewImage}`;
+
   const metaFilePath = path.join(process.cwd(), 'puzzle-data', difficulty, `${puzzleId}.metadata.json`);
 
   try {
@@ -24,6 +28,9 @@ export async function generateMetadata({
       image?: string;
     };
 
+    // Use custom image from metadata if provided, otherwise use preview image
+    const ogImage = data.image ?? previewImageUrl;
+
     return {
       title: data.title ?? `${difficultyString} Sudoku Puzzle ${puzzleId} | Vanilla Sudoku`,
       description: data.description ?? `Play ${difficultyString} Sudoku Puzzle ${puzzleId}`,
@@ -31,29 +38,30 @@ export async function generateMetadata({
         title: data.title ?? `${difficultyString} Sudoku Puzzle ${puzzleId} | Vanilla Sudoku`,
         description: data.description ?? `Play ${difficultyString} Sudoku Puzzle ${puzzleId}`,
         url: data.videoUrl,
-        images: data.image
-          ? [{ url: data.image, width: 1200, height: 630, alt: data.title ?? 'Vanilla Sudoku' }]
-          : undefined,
+        images: [{ url: ogImage, width: 1200, height: 630, alt: data.title ?? 'Vanilla Sudoku' }],
       },
       twitter: {
         card: 'summary_large_image',
         title: data.title ?? `${difficultyString} Sudoku Puzzle ${puzzleId} | Vanilla Sudoku`,
         description: data.description ?? `Play ${difficultyString} Sudoku Puzzle ${puzzleId}`,
-        images: data.image ? [data.image] : undefined,
+        images: [ogImage],
       },
     };
   } catch {
-    // Metadata file doesn't exist, fall back to basic version
+    // Metadata file doesn't exist, fall back to preview image
     return {
       title: `${difficultyString} Sudoku Puzzle ${puzzleId} | Vanilla Sudoku`,
       description: `Play ${difficultyString} Sudoku Puzzle ${puzzleId}`,
       openGraph: {
         title: `${difficultyString} Sudoku Puzzle ${puzzleId} | Vanilla Sudoku`,
         description: `Play ${difficultyString} Sudoku Puzzle ${puzzleId}`,
+        images: [{ url: previewImageUrl, width: 1200, height: 630, alt: 'Vanilla Sudoku' }],
       },
       twitter: {
+        card: 'summary_large_image',
         title: `${difficultyString} Sudoku Puzzle ${puzzleId} | Vanilla Sudoku`,
         description: `Play ${difficultyString} Sudoku Puzzle ${puzzleId}`,
+        images: [previewImageUrl],
       },
     };
   }
