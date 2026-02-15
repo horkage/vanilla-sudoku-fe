@@ -86,6 +86,14 @@ jobs:
             cp "puzzle-data/candidate/${CANDIDATE_ID}.youtube" "/tmp/promo_${NEXT_ID}.youtube"
           fi
           
+          # Copy preview screenshot if it exists
+          if [ -f "puzzle-data/candidate/${CANDIDATE_ID}.png" ]; then
+            cp "puzzle-data/candidate/${CANDIDATE_ID}.png" "/tmp/promo_${NEXT_ID}.png"
+            echo "📸 Preview screenshot found"
+          else
+            echo "⚠️  No preview screenshot found (will need to be generated manually)"
+          fi
+          
           echo "✅ Prepared candidate ${CANDIDATE_ID} for promotion to $DIFFICULTY/${NEXT_ID}"
 
       - name: Commit to main branch
@@ -108,8 +116,16 @@ jobs:
           [ -f "/tmp/promo_${NEXT_ID}.youtube" ] && \
             cp "/tmp/promo_${NEXT_ID}.youtube" "puzzle-data/$DIFFICULTY/${NEXT_ID}.youtube"
           
+          # Copy preview screenshot to public images directory
+          if [ -f "/tmp/promo_${NEXT_ID}.png" ]; then
+            mkdir -p "public/images/puzzles/$DIFFICULTY"
+            cp "/tmp/promo_${NEXT_ID}.png" "public/images/puzzles/$DIFFICULTY/${NEXT_ID}.png"
+            echo "📸 Preview screenshot copied to public/images/puzzles/$DIFFICULTY/${NEXT_ID}.png"
+          fi
+          
           # Commit and push
           git add puzzle-data/$DIFFICULTY/
+          git add public/images/puzzles/$DIFFICULTY/
           git commit -m "Promote candidate puzzle ${CANDIDATE_ID} to $DIFFICULTY as ${NEXT_ID}"
           git push origin main
           
@@ -141,6 +157,7 @@ jobs:
           rm -f "puzzle-data/candidate/${CANDIDATE_ID}.grid"
           rm -f "puzzle-data/candidate/${CANDIDATE_ID}.metadata.json"
           rm -f "puzzle-data/candidate/${CANDIDATE_ID}.youtube"
+          rm -f "puzzle-data/candidate/${CANDIDATE_ID}.png"
           
           # Commit and push
           git add puzzle-data/candidate/
@@ -157,4 +174,5 @@ jobs:
           rm -f "/tmp/promo_${NEXT_ID}.grid"
           rm -f "/tmp/promo_${NEXT_ID}.metadata.json"
           rm -f "/tmp/promo_${NEXT_ID}.youtube"
+          rm -f "/tmp/promo_${NEXT_ID}.png"
           echo "🧹 Cleaned up temporary promotion files"
