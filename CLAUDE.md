@@ -32,7 +32,9 @@ Vanilla Sudoku is not for hard-core sudoku players that spam hints and stare at 
 - `src/components/` — six components; `SudokuPlayer.tsx` is the big one (~460 lines, all gameplay state), `SudokuGrid.tsx` renders the grid, plus `NumberPad`, `HintPad`, `CreateGrid`, `Header`
 - `src/utils/gameStateCodec.js` — the URL codec for sharable puzzle states
 - `puzzle-data/{easy,medium,hard}/` — live puzzles served by the site (see file format below)
-- `tools/` — the puzzle generator pipeline; **read `tools/PUZZLE_GENERATOR.md` first**, it documents the whole pipeline (generate → solve-validate → post-process)
+- `tools/` — the puzzle generator pipeline; **read `tools/PUZZLE_GENERATOR.md` first**, it documents the whole pipeline (generate → solve-validate → post-process). Note: `tools/` is gitignored **by design** — the generator is intentionally not open-source (the owner backs it up separately). Don't suggest committing it; just remember `git show`/history won't work there, so keep a copy in context before rewriting files
+- `tools/solveAll.js` — verification + calibration harness: solves every live puzzle in `puzzle-data/` against its known solution and grades it (`node tools/solveAll.js`)
+- `tools/difficultyGrader.js` — grades a puzzle by the lowest technique tier that can solve it (1=basic scans, 2=pointing pairs, 3=naked pairs, 4=x-wings), plus passes and clue count
 - `tools/algo/` — solver technique modules (`step01BoxScan` … `step08XWingCols`); the solver doubles as the difficulty validator
 - `.github/workflows/` — `deploy-prod.yml` (push to main → deploy to EC2), `deploy-dev.yml`, `promote-puzzle.yml`, `reject-puzzle.yml`
 
@@ -61,7 +63,7 @@ Branches: `main` (production), `candidate` (puzzle staging), `custom` (legacy/fe
 
 - `npm run dev` — local dev server
 - `npm run build` — production build (good sanity check before pushing)
-- `npm run generate:candidates` — run the generator pipeline (`tools/pipelineRunner.js`, 5 puzzles from a batch of 500)
+- `npm run generate:candidates` — run the generator pipeline (`tools/pipelineRunner.js`, batch of 500, digs toward medium by default); add `-- --target=easy|medium|hard` to aim the difficulty
 - `npm run generate:candidates:quick` — 1 puzzle, batch of 100, skips post-processing
 - `npm run generate:screenshots` — regenerate puzzle preview images (Playwright)
 - `npm run generate:sitemap` — regenerate sitemap
