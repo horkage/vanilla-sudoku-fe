@@ -50,15 +50,16 @@ jobs:
             
             BUILD_DIR=vanilla-sudoku
             
-            # Backup current version
+            # Backup current version (mv is instant and needs no extra disk;
+            # PM2 keeps serving from the moved directory until the
+            # post-build restart picks up the new one)
             if [ -d "$BUILD_DIR" ]; then
               TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-              cp -rip $BUILD_DIR ${BUILD_DIR}_backup_$TIMESTAMP
+              mv $BUILD_DIR ${BUILD_DIR}_backup_$TIMESTAMP
               echo "🔄 Backup created: ${BUILD_DIR}_backup_$TIMESTAMP"
             fi
-            
+
             # Extract new version
-            rm -rf $BUILD_DIR
             mkdir $BUILD_DIR
             tar -xzf vanilla-sudoku.tar.gz -C $BUILD_DIR
             
@@ -85,9 +86,123 @@ jobs:
               exit 1
             fi
             
-            # Cleanup
+            # Cleanup old backups (keep only 2 most recent)
+            cd /home/ubuntu
+            ls -td ${BUILD_DIR}_backup_* 2>/dev/null | tail -n +3 | xargs -r rm -rf
+            
+            # Cleanup tarball
             rm -f /home/ubuntu/vanilla-sudoku.tar.gz
           EOF
+
+      - name: Post to Bluesky
+        if: success()
+        run: |
+          # Extract puzzle info from commit message
+          COMMIT_MSG=$(git log -1 --pretty=%B)
+          
+          # Check if this is a puzzle promotion commit
+          if echo "$COMMIT_MSG" | grep -q "Promote candidate puzzle"; then
+            # Extract difficulty and ID from commit message
+            # Example: "Promote candidate puzzle 001 to easy as 0014"
+            DIFFICULTY=$(echo "$COMMIT_MSG" | sed -n 's/.*to \(easy\|medium\|hard\) as.*/\1/p')
+            PUZZLE_ID=$(echo "$COMMIT_MSG" | sed -n 's/.*as \([0-9]*\)/\1/p')
+            
+            if [ -n "$DIFFICULTY" ] && [ -n "$PUZZLE_ID" ]; then
+              # Remove leading zeros for display number only
+              DISPLAY_NUM=$((10#$PUZZLE_ID))
+              
+              # Capitalize difficulty
+              DIFFICULTY_CAP=$(echo "$DIFFICULTY" | sed 's/\b\(.\)/\u\1/')
+              
+              # Create Bluesky session
+              SESSION_RESPONSE=$(curl -s -X POST https://bsky.social/xrpc/com.atproto.server.createSession \
+                -H "Content-Type: application/json" \
+                -d "{\"identifier\":\"vanillasudoku.bsky.social\",\"password\":\"${{ secrets.BLUESKY_APP_PASSWORD }}\"}")
+              
+              ACCESS_TOKEN=$(echo "$SESSION_RESPONSE" | jq -r '.accessJwt')
+              DID=$(echo "$SESSION_RESPONSE" | jq -r '.did')
+              
+              if [ "$ACCESS_TOKEN" != "null" ] && [ -n "$ACCESS_TOKEN" ]; then
+                # Create post with embedded link card (keep padded ID in URL)
+                PUZZLE_URL="https://vanilla-sudoku.com/puzzles/$DIFFICULTY/puzzle/$PUZZLE_ID"
+                POST_TEXT="Fresh puzzle from Vanilla Sudoku! 🧩 #$DISPLAY_NUM ($DIFFICULTY_CAP) - can you solve it? $PUZZLE_URL #Sudoku #LogicPuzzle"
+                
+                # Calculate byte positions for clickable link and hashtags (facets)
+                # Use byte counting for proper Unicode handling (emoji is 4 bytes)
+                TEXT_BEFORE="Fresh puzzle from Vanilla Sudoku! 🧩 #$DISPLAY_NUM ($DIFFICULTY_CAP) - can you solve it? "
+                LINK_START=$(echo -n "$TEXT_BEFORE" | wc -c)
+                LINK_END=$((LINK_START + $(echo -n "$PUZZLE_URL" | wc -c)))
+                
+                # Hashtag positions
+                TEXT_BEFORE_SUDOKU="Fresh puzzle from Vanilla Sudoku! 🧩 #$DISPLAY_NUM ($DIFFICULTY_CAP) - can you solve it? $PUZZLE_URL "
+                SUDOKU_START=$(echo -n "$TEXT_BEFORE_SUDOKU" | wc -c)
+                SUDOKU_END=$((SUDOKU_START + 7))  # #Sudoku = 7 bytes
+                
+                TEXT_BEFORE_LOGIC="Fresh puzzle from Vanilla Sudoku! 🧩 #$DISPLAY_NUM ($DIFFICULTY_CAP) - can you solve it? $PUZZLE_URL #Sudoku "
+                LOGIC_START=$(echo -n "$TEXT_BEFORE_LOGIC" | wc -c)
+                LOGIC_END=$((LOGIC_START + 12))  # #LogicPuzzle = 12 bytes
+                
+                # Create the post with facets for clickable link and hashtags
+                curl -s -X POST https://bsky.social/xrpc/com.atproto.repo.createRecord \
+                  -H "Authorization: Bearer $ACCESS_TOKEN" \
+                  -H "Content-Type: application/json" \
+                  -d "{
+                    \"repo\": \"$DID\",
+                    \"collection\": \"app.bsky.feed.post\",
+                    \"record\": {
+                      \"text\": \"$POST_TEXT\",
+                      \"facets\": [
+                        {
+                          \"index\": {
+                            \"byteStart\": $LINK_START,
+                            \"byteEnd\": $LINK_END
+                          },
+                          \"features\": [
+                            {
+                              \"\$type\": \"app.bsky.richtext.facet#link\",
+                              \"uri\": \"$PUZZLE_URL\"
+                            }
+                          ]
+                        },
+                        {
+                          \"index\": {
+                            \"byteStart\": $SUDOKU_START,
+                            \"byteEnd\": $SUDOKU_END
+                          },
+                          \"features\": [
+                            {
+                              \"\$type\": \"app.bsky.richtext.facet#tag\",
+                              \"tag\": \"Sudoku\"
+                            }
+                          ]
+                        },
+                        {
+                          \"index\": {
+                            \"byteStart\": $LOGIC_START,
+                            \"byteEnd\": $LOGIC_END
+                          },
+                          \"features\": [
+                            {
+                              \"\$type\": \"app.bsky.richtext.facet#tag\",
+                              \"tag\": \"LogicPuzzle\"
+                            }
+                          ]
+                        }
+                      ],
+                      \"createdAt\": \"$(date -u +%Y-%m-%dT%H:%M:%S.000Z)\",
+                      \"\$type\": \"app.bsky.feed.post\"
+                    }
+                  }"
+                
+                echo "✅ Posted to Bluesky: $POST_TEXT"
+              else
+                echo "❌ Failed to authenticate with Bluesky"
+                exit 1
+              fi
+            fi
+          else
+            echo "ℹ️ Not a puzzle promotion commit, skipping Bluesky post"
+          fi
 
       - name: Cleanup
         if: always()
