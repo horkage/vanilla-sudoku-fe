@@ -50,15 +50,16 @@ jobs:
             
             BUILD_DIR=vanilla-sudoku
             
-            # Backup current version
+            # Backup current version (mv is instant and needs no extra disk;
+            # PM2 keeps serving from the moved directory until the
+            # post-build restart picks up the new one)
             if [ -d "$BUILD_DIR" ]; then
               TIMESTAMP=$(date +%Y%m%d_%H%M%S)
-              cp -rip $BUILD_DIR ${BUILD_DIR}_backup_$TIMESTAMP
+              mv $BUILD_DIR ${BUILD_DIR}_backup_$TIMESTAMP
               echo "🔄 Backup created: ${BUILD_DIR}_backup_$TIMESTAMP"
             fi
-            
+
             # Extract new version
-            rm -rf $BUILD_DIR
             mkdir $BUILD_DIR
             tar -xzf vanilla-sudoku.tar.gz -C $BUILD_DIR
             
@@ -87,7 +88,7 @@ jobs:
             
             # Cleanup old backups (keep only 2 most recent)
             cd /home/ubuntu
-            ls -td ${BUILD_DIR}_backup_* 2>/dev/null | tail -n +3 | xargs rm -rf
+            ls -td ${BUILD_DIR}_backup_* 2>/dev/null | tail -n +3 | xargs -r rm -rf
             
             # Cleanup tarball
             rm -f /home/ubuntu/vanilla-sudoku.tar.gz

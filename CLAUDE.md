@@ -55,7 +55,8 @@ New puzzles flow through a single-slot candidate system on the `candidate` branc
 2. Promising puzzle goes to `puzzle-data/candidate/` as ID `001`, committed to the `candidate` branch
 3. Test it at `dev.vanilla-sudoku.com:3000/puzzles/candidate/puzzle/001`
 4. Promote via the `promote-puzzle.yml` GitHub Action (manual dispatch, pick difficulty) — it finds the next free ID on `main` for that difficulty and commits the files there
-5. Or reject via `reject-puzzle.yml`, which clears the candidate slot
+5. **The promote does NOT auto-deploy**: pushes made by Actions with `GITHUB_TOKEN` don't trigger other workflows. After promoting, manually dispatch the deploy (`gh workflow run deploy-prod.yml` or the Actions tab), then `git pull` local main.
+6. Or reject via `reject-puzzle.yml`, which clears the candidate slot
 
 Branches: `main` (production), `candidate` (puzzle staging), `custom` (legacy/feature).
 
