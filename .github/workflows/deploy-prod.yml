@@ -9,7 +9,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v5
@@ -25,7 +25,7 @@ jobs:
         run: |
           # Remove build artifacts if they exist
           rm -rf .next node_modules
-          
+
           # Create archive (ignore warnings about files changing)
           tar --warning=no-file-changed -czf vanilla-sudoku.tar.gz \
             --exclude='.git' \
@@ -42,14 +42,14 @@ jobs:
         run: |
           ssh -i ~/.ssh/deploy_key ${{ secrets.PROD_SSH_USER }}@${{ secrets.PROD_SSH_HOST }} << 'EOF'
             set -e
-            
+
             # Source NVM
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm use 20 || export PATH="$HOME/.nvm/versions/node/v20.19.2/bin:$PATH"
-            
+
             BUILD_DIR=vanilla-sudoku
-            
+
             # Backup current version (mv is instant and needs no extra disk;
             # PM2 keeps serving from the moved directory until the
             # post-build restart picks up the new one)
@@ -62,11 +62,11 @@ jobs:
             # Extract new version
             mkdir $BUILD_DIR
             tar -xzf vanilla-sudoku.tar.gz -C $BUILD_DIR
-            
+
             # Build
             cd $BUILD_DIR
             npm install
-            
+
             if npm run build; then
               echo "✅ Build succeeded"
               pm2 restart sudoku
@@ -85,124 +85,38 @@ jobs:
               fi
               exit 1
             fi
-            
+
             # Cleanup old backups (keep only 2 most recent)
             cd /home/ubuntu
             ls -td ${BUILD_DIR}_backup_* 2>/dev/null | tail -n +3 | xargs -r rm -rf
-            
+
             # Cleanup tarball
             rm -f /home/ubuntu/vanilla-sudoku.tar.gz
           EOF
 
       - name: Post to Bluesky
         if: success()
+        env:
+          BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
         run: |
-          # Extract puzzle info from commit message
+          # Auto-post only when this deploy is a puzzle promotion.
+          # Example commit: "Promote candidate puzzle 001 to easy as 0014"
           COMMIT_MSG=$(git log -1 --pretty=%B)
-          
-          # Check if this is a puzzle promotion commit
-          if echo "$COMMIT_MSG" | grep -q "Promote candidate puzzle"; then
-            # Extract difficulty and ID from commit message
-            # Example: "Promote candidate puzzle 001 to easy as 0014"
-            DIFFICULTY=$(echo "$COMMIT_MSG" | sed -n 's/.*to \(easy\|medium\|hard\) as.*/\1/p')
-            PUZZLE_ID=$(echo "$COMMIT_MSG" | sed -n 's/.*as \([0-9]*\)/\1/p')
-            
-            if [ -n "$DIFFICULTY" ] && [ -n "$PUZZLE_ID" ]; then
-              # Remove leading zeros for display number only
-              DISPLAY_NUM=$((10#$PUZZLE_ID))
-              
-              # Capitalize difficulty
-              DIFFICULTY_CAP=$(echo "$DIFFICULTY" | sed 's/\b\(.\)/\u\1/')
-              
-              # Create Bluesky session
-              SESSION_RESPONSE=$(curl -s -X POST https://bsky.social/xrpc/com.atproto.server.createSession \
-                -H "Content-Type: application/json" \
-                -d "{\"identifier\":\"vanillasudoku.bsky.social\",\"password\":\"${{ secrets.BLUESKY_APP_PASSWORD }}\"}")
-              
-              ACCESS_TOKEN=$(echo "$SESSION_RESPONSE" | jq -r '.accessJwt')
-              DID=$(echo "$SESSION_RESPONSE" | jq -r '.did')
-              
-              if [ "$ACCESS_TOKEN" != "null" ] && [ -n "$ACCESS_TOKEN" ]; then
-                # Create post with embedded link card (keep padded ID in URL)
-                PUZZLE_URL="https://vanilla-sudoku.com/puzzles/$DIFFICULTY/puzzle/$PUZZLE_ID"
-                POST_TEXT="Fresh puzzle from Vanilla Sudoku! 🧩 #$DISPLAY_NUM ($DIFFICULTY_CAP) - can you solve it? $PUZZLE_URL #Sudoku #LogicPuzzle"
-                
-                # Calculate byte positions for clickable link and hashtags (facets)
-                # Use byte counting for proper Unicode handling (emoji is 4 bytes)
-                TEXT_BEFORE="Fresh puzzle from Vanilla Sudoku! 🧩 #$DISPLAY_NUM ($DIFFICULTY_CAP) - can you solve it? "
-                LINK_START=$(echo -n "$TEXT_BEFORE" | wc -c)
-                LINK_END=$((LINK_START + $(echo -n "$PUZZLE_URL" | wc -c)))
-                
-                # Hashtag positions
-                TEXT_BEFORE_SUDOKU="Fresh puzzle from Vanilla Sudoku! 🧩 #$DISPLAY_NUM ($DIFFICULTY_CAP) - can you solve it? $PUZZLE_URL "
-                SUDOKU_START=$(echo -n "$TEXT_BEFORE_SUDOKU" | wc -c)
-                SUDOKU_END=$((SUDOKU_START + 7))  # #Sudoku = 7 bytes
-                
-                TEXT_BEFORE_LOGIC="Fresh puzzle from Vanilla Sudoku! 🧩 #$DISPLAY_NUM ($DIFFICULTY_CAP) - can you solve it? $PUZZLE_URL #Sudoku "
-                LOGIC_START=$(echo -n "$TEXT_BEFORE_LOGIC" | wc -c)
-                LOGIC_END=$((LOGIC_START + 12))  # #LogicPuzzle = 12 bytes
-                
-                # Create the post with facets for clickable link and hashtags
-                curl -s -X POST https://bsky.social/xrpc/com.atproto.repo.createRecord \
-                  -H "Authorization: Bearer $ACCESS_TOKEN" \
-                  -H "Content-Type: application/json" \
-                  -d "{
-                    \"repo\": \"$DID\",
-                    \"collection\": \"app.bsky.feed.post\",
-                    \"record\": {
-                      \"text\": \"$POST_TEXT\",
-                      \"facets\": [
-                        {
-                          \"index\": {
-                            \"byteStart\": $LINK_START,
-                            \"byteEnd\": $LINK_END
-                          },
-                          \"features\": [
-                            {
-                              \"\$type\": \"app.bsky.richtext.facet#link\",
-                              \"uri\": \"$PUZZLE_URL\"
-                            }
-                          ]
-                        },
-                        {
-                          \"index\": {
-                            \"byteStart\": $SUDOKU_START,
-                            \"byteEnd\": $SUDOKU_END
-                          },
-                          \"features\": [
-                            {
-                              \"\$type\": \"app.bsky.richtext.facet#tag\",
-                              \"tag\": \"Sudoku\"
-                            }
-                          ]
-                        },
-                        {
-                          \"index\": {
-                            \"byteStart\": $LOGIC_START,
-                            \"byteEnd\": $LOGIC_END
-                          },
-                          \"features\": [
-                            {
-                              \"\$type\": \"app.bsky.richtext.facet#tag\",
-                              \"tag\": \"LogicPuzzle\"
-                            }
-                          ]
-                        }
-                      ],
-                      \"createdAt\": \"$(date -u +%Y-%m-%dT%H:%M:%S.000Z)\",
-                      \"\$type\": \"app.bsky.feed.post\"
-                    }
-                  }"
-                
-                echo "✅ Posted to Bluesky: $POST_TEXT"
-              else
-                echo "❌ Failed to authenticate with Bluesky"
-                exit 1
-              fi
-            fi
-          else
+          if ! echo "$COMMIT_MSG" | grep -q "Promote candidate puzzle"; then
             echo "ℹ️ Not a puzzle promotion commit, skipping Bluesky post"
+            exit 0
           fi
+
+          DIFFICULTY=$(echo "$COMMIT_MSG" | sed -n 's/.*to \(easy\|medium\|hard\) as.*/\1/p')
+          PUZZLE_ID=$(echo "$COMMIT_MSG" | sed -n 's/.*as \([0-9]*\).*/\1/p')
+          if [ -z "$DIFFICULTY" ] || [ -z "$PUZZLE_ID" ]; then
+            echo "⚠️ Could not parse difficulty/id from commit; skipping Bluesky post"
+            exit 0
+          fi
+
+          # All Bluesky logic (auth, image blob upload, embed card, facets) lives in
+          # the script so CI and local runs share one implementation.
+          node scripts/post-to-bluesky.mjs --difficulty="$DIFFICULTY" --id="$PUZZLE_ID"
 
       - name: Cleanup
         if: always()
