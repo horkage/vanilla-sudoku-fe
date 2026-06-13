@@ -1,6 +1,25 @@
 import './globals.css';
 import type { Metadata } from 'next';
+import { Youtube } from 'lucide-react';
+import { Newsreader, Hanken_Grotesk } from 'next/font/google';
 import Header from '@/components/Header';
+
+// Display serif "voice" — headlines, hero copy, footer tagline, wordmark.
+const serif = Newsreader({
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  weight: ['300', '400', '500', '600'],
+  variable: '--font-display',
+  display: 'swap',
+});
+
+// UI/body sans — nav, button, invitation line, copyright.
+const sans = Hanken_Grotesk({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-body',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   title: 'Vanilla Sudoku',
@@ -39,8 +58,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const year = new Date().getFullYear();
+
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className={`h-full ${serif.variable} ${sans.variable}`}>
       <body className="flex flex-col min-h-screen bg-[#EEE9DA] text-gray-800 m-0 p-0">
         <div className="relative">
           <Header />
@@ -50,11 +71,32 @@ export default function RootLayout({
           {children}
         </main>
 
-        <footer className="bg-[#6096B4] text-center p-4 text-sm text-[#EEE9DA]">
-          © {new Date().getFullYear()} Vanilla Sudoku
+        {/* Quiet teal footer — grounds the brand. */}
+        <footer className="bg-[#6096B4] text-[#EEE9DA]">
+          <div className="mx-auto flex max-w-[1200px] flex-wrap items-center justify-between gap-4 px-6 py-8">
+            <span
+              className="text-lg font-medium"
+              style={{ fontFamily: 'var(--font-display)' }}
+            >
+              A quiet place for puzzles.
+            </span>
+            <div
+              className="flex items-center gap-6 text-sm"
+              style={{ fontFamily: 'var(--font-body)' }}
+            >
+              <a
+                href="https://www.youtube.com/@vanillasudoku"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 opacity-90 transition-opacity hover:opacity-100"
+              >
+                <Youtube size={16} /> Walkthroughs
+              </a>
+              <span className="opacity-[0.85]">&copy; {year} Vanilla Sudoku</span>
+            </div>
+          </div>
         </footer>
       </body>
     </html>
   );
 }
-

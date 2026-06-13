@@ -1,225 +1,108 @@
 import Link from 'next/link';
-import Image from 'next/image';
+import { ArrowRight } from 'lucide-react';
+
+// Detailed 3x3 sudoku-fragment motif: 84px, white cells, 2px ink outer border,
+// 1px gray inner hairlines, a few teal digits.
+const HERO_CELLS = ['', '2', '', '', '', '6', '', '7', ''];
+
+function HeroGrid() {
+  return (
+    <div
+      aria-label="Sudoku grid fragment"
+      role="img"
+      className="grid h-[84px] w-[84px] grid-cols-3 grid-rows-3 rounded-[2px] border-2 border-[#333333] bg-white shadow-[0_1px_2px_rgba(43,42,38,0.06)]"
+    >
+      {HERO_CELLS.map((v, i) => (
+        <div
+          key={i}
+          className="flex items-center justify-center text-[14px] font-bold leading-none text-[#6096B4]"
+          style={{
+            fontFamily: 'var(--font-body)',
+            borderRight: i % 3 !== 2 ? '1px solid #6B7280' : 'none',
+            borderBottom: i < 6 ? '1px solid #6B7280' : 'none',
+          }}
+        >
+          {v}
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function Home() {
   return (
-    <div>
-      <div className="flex justify-center items-start">
-        <div className="relative w-[90%] md:w-[75%] mt-3 p-6 overflow-hidden border border-[#333333] rounded bg-white">
-          {/* Background Image */}
-          <div
-            className="absolute inset-0 bg-cover bg-center z-0"
-            style={{ backgroundImage: "url('/images/sudoku-puzzle.jpeg')" }}
-          />
+    <section className="relative overflow-hidden bg-[#EEE9DA]">
+      {/* Barely-there defocused grid texture */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: "url('/images/sudoku-puzzle.jpeg')",
+          opacity: 0.5,
+          filter: 'saturate(0.7)',
+        }}
+      />
+      {/* Heavy cream veil over the texture */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0"
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(238,233,218,0.86) 0%, rgba(238,233,218,0.93) 55%, #EEE9DA 100%)',
+        }}
+      />
 
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 z-10 bg-gradient-to-b from-white/100 via-white/90 to-white/80" />
-
-          {/* Foreground Content */}
-          <div className="relative z-20 text-[#333333]">
-            <h1 className="text-xl md:text-2xl font-bold mb-4 tracking-wide border-b border-[#CCC]">The Quiet Joy of Natural Logic and Discovery</h1>
-            <div className="text-base md:text-lg leading-relaxed">
-              My puzzles are home-made and crafted to be enjoyed through simple, natural progression. You certainly can look for arcane patterns in my puzzles if you so desire - I certainly won&apos;t stop you - but my puzzles are better suited for a more relaxed and laid-back solving approach.
-              <br />
-              <br />Play however you like, because here, puzzles unfold at their own pace - no one is timing you and no one is judging you. Just be sure to unplug from time to time, and listen closely to these puzzles - they just might tell you how to solve them. With minimal fuss, of course.
-              <br />
-
-              <div className="mt-4 flex justify-center">
-                <a
-                  href="https://www.youtube.com/watch?v=MeQ6Wjz-9zo&ab_channel=VanillaSudoku"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group block relative w-full md:w-[75%] lg:w-[60%] aspect-video overflow-hidden rounded border border-[#333333]"
-                >
-                  <img
-                    src="https://img.youtube.com/vi/MeQ6Wjz-9zo/hqdefault.jpg"
-                    alt="YouTube video thumbnail"
-                    className="w-full h-full object-cover transition-opacity group-hover:opacity-80"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-16 h-16 bg-white/80 rounded-full flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
-                      <svg
-                        className="w-6 h-6 text-[#333333]"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M6 4l12 6-12 6V4z" />
-                      </svg>
-                    </div>
-                  </div>
-                </a>
-              </div>
-
-            </div>
-          </div>
+      <div
+        className="relative z-[1] mx-auto flex max-w-[660px] flex-col items-center text-center"
+        style={{ padding: 'clamp(64px, 12vw, 128px) 28px clamp(72px, 12vw, 120px)' }}
+      >
+        {/* Quiet brand motif */}
+        <div className="mb-12 opacity-95">
+          <HeroGrid />
         </div>
-      </div>
 
-      <div className="flex justify-center mt-6 mb-12">
-        <div className="w-[90%] md:w-[75%] space-y-6">
-          { /* news stuff things */ }
-
-          { /* embedded thing */ }
-          <div className="bg-white border border-[#333333] rounded p-4 mb-4 shadow-sm flex flex-col md:flex-row gap-4">
-            <div className="w-full md:w-1/3">
-              <iframe
-                className="w-full aspect-video rounded"
-                src="https://www.youtube.com/embed/fpXYvVYbNEY"
-                title="YouTube video"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-            <div className="flex-1">
-              <h2 className="text-lg font-semibold text-[#333333] mb-2">New Video: Medium Puzzle (0001) Walkthrough</h2>
-              <p className="text-[#333333] text-base leading-relaxed">
-                I&apos;m slowly trying to backfill video walkthroughs for my curated puzzles, and the next walktrhough video is for my first solvable <Link className="vs-link" href="/puzzles/medium/puzzle/0001">Medium Difficulty Puzzle (0001)</Link> I made. I take a quicker, but more natural approach to solving this puzzle and managed to get its runtime down to about 18 minutes. Not bad!
-                <br />
-                <br />
-                You can play this very puzzle along with me <Link className="vs-link" href="/puzzles/medium/puzzle/0001">right here</Link>. Bonus points if you spot my mistakes and fix them yourself!
-              </p>
-              <p className="text-sm text-[#666] mt-2">Jul 23, 2025</p>
-            </div>
-          </div>
-
-          { /* text only thing */ }
-          <div className="bg-white border border-[#333333] rounded p-4 mb-4 shadow-sm">
-            <h2 className="text-lg font-semibold text-[#333333] mb-2">New Feature: Create & Share Puzzles!</h2>
-            <p className="text-[#333333] text-base leading-relaxed">
-              I have added a new feature to the site that allows for portable sudoku puzzles with state preservation. If you see a screenshot of a puzzle you&apos;d like to play, or maybe help someone else with that puzzle, you can use the new <Link className="vs-link" href="/create">Create & Share</Link> feature I&apos;ve added to do just that.<br /><br />Create the puzzle, save it, mess around with it, and then share it. Sharing a puzzle will retain the entire state of the original puzzle, the numbers you put in yourself, and even hints! You could even use it to play a puzzle on one computer and then shoot yourself the link and pick up your puzzle where you left off on another computer. <i>This feature only works for desktop and custom or shared puzzles cannot be verified with the Check button.</i><br /><br /><Link className="vs-link" href="/create">Give it a whirl today</Link>!
-            </p>
-            <div className="hidden md:block flex justify-center my-4">
-              <Link className="vs-link" href="/create">
-                <Image
-                  src="/images/create-play-share.jpg"
-                  alt="Create & Share Vanilla Sudoku Feature"
-                  width={1920}
-                  height={1080}
-                  className="rounded shadow"
-                />
-              </Link>
-            </div>
-            <p className="text-sm text-[#666] mt-2">Jul 1, 2025</p>
-          </div>
-
-          { /* embedded thing */ }
-          <div className="bg-white border border-[#333333] rounded p-4 mb-4 shadow-sm flex flex-col md:flex-row gap-4">
-            <div className="w-full md:w-1/3">
-              <iframe
-                className="w-full aspect-video rounded"
-                src="https://www.youtube.com/embed/bMQ6rY01V4c"
-                title="YouTube video"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-            <div className="flex-1">
-              <h2 className="text-lg font-semibold text-[#333333] mb-2">New Video: Introductory Sudoku Walkthrough Part 2</h2>
-              <p className="text-[#333333] text-base leading-relaxed">
-                This is part two of my introductory sudoku walkthrough where I apply what I covered in part one to solve one of my very own difficult puzzles.  We address things like pointing pairs, naked pairs, and x-wings, but we do so as they naturally and organically reveal themselves within the grid as we solve the puzzle.<br /><br />If there is a sudoku player hiding within you, I hope this video will help coax them out!<br /><br />
-                You can play this very puzzle featured within this video <Link className="vs-link" href="/puzzles/hard/puzzle/0001">right here</Link>.
-              </p>
-              <p className="text-sm text-[#666] mt-2">Jun 26, 2025</p>
-            </div>
-          </div>
-
-          { /* embedded thing */ }
-          <div className="bg-white border border-[#333333] rounded p-4 mb-4 shadow-sm flex flex-col md:flex-row gap-4">
-            <div className="w-full md:w-1/3">
-              <iframe
-                className="w-full aspect-video rounded"
-                src="https://www.youtube.com/embed/2CVLuVnCxws"
-                title="YouTube video"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-            <div className="flex-1">
-              <h2 className="text-lg font-semibold text-[#333333] mb-2">New Video: Introductory Sudoku Walkthrough Part 1</h2>
-              <p className="text-[#333333] text-base leading-relaxed">
-                This is part one of my introductory sudoku walkthrough where I lay some basic foundations for solving any puzzle.  In the second part, we will actually solve a hard puzzle together using what we cover in this video. You can even play the puzzle featured in this video yourself <Link className="vs-link" href="/puzzles/hard/puzzle/0001">right here</Link>.<br /><br />We cover basics like the rules of sudoku and general strategy that can be applied to any puzzle, and with this two-part series, you will be ready to blast through almost any puzzle!
-              </p>
-              <p className="text-sm text-[#666] mt-2">Jun 26, 2025</p>
-            </div>
-          </div>
-
-          { /* embedded thing */ }
-          <div className="bg-white border border-[#333333] rounded p-4 mb-4 shadow-sm flex flex-col md:flex-row gap-4">
-            <div className="w-full md:w-1/3">
-              <iframe
-                className="w-full aspect-video rounded"
-                src="https://www.youtube.com/embed/6fH0DfH6kEM"
-                title="YouTube video"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-            <div className="flex-1">
-              <h2 className="text-lg font-semibold text-[#333333] mb-2">New Video: Easy Puzzle 0001 Walkthrough</h2>
-              <p className="text-[#333333] text-base leading-relaxed">
-                I walk through and narrate solving the very first puzzle my algorithm ever made. I make some fun mistakes, so check it out!<br /><br />Or, you can <Link className="vs-link" href="/puzzles/easy/puzzle/0001">play the puzzle</Link> yourself right now.
-              </p>
-              <p className="text-sm text-[#666] mt-2">Jun 7, 2025</p>
-            </div>
-          </div>
-
-          { /* text only thing */ }
-          <div className="bg-white border border-[#333333] rounded p-4 mb-4 shadow-sm">
-            <h2 className="text-lg font-semibold text-[#333333] mb-2">New Stuff!</h2>
-            <p className="text-[#333333] text-base leading-relaxed">
-              I pulled the site out of the stone age. It should be reasonably responsive on all devices, now. The words &quot;reasonably&quot; and &quot;should&quot; are doing a lot of heavy lifting here, of course. Be sure to checkout some of the puzzles I have made.<br /><br />I have some <Link className="vs-link" href="/puzzles/easy">easy</Link> puzzles, some <Link className="vs-link" href="/puzzles/medium">medium</Link> ones, and a lonely <Link className="vs-link" href="/puzzles/hard">hard</Link> one, all by itself.  If there is a video icon next to the puzzle, that means that puzzle has a walkthrough!
-            </p>
-            <p className="text-sm text-[#666] mt-2">May 28, 2025</p>
-          </div>
-
-          { /* embedded thing */ }
-          <div className="bg-white border border-[#333333] rounded p-4 mb-4 shadow-sm flex flex-col md:flex-row gap-4">
-            <div className="w-full md:w-1/3">
-              <iframe
-                className="w-full aspect-video rounded"
-                src="https://www.youtube.com/embed/mIboT_Cqemc"
-                title="YouTube video"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-            <div className="flex-1">
-              <h2 className="text-lg font-semibold text-[#333333] mb-2">New Video: Solving Puzzles</h2>
-              <p className="text-[#333333] text-base leading-relaxed">
-                Walkthrough showing how I go about solving analog puzzles. Digital ones, too!
-              </p>
-              <p className="text-sm text-[#666] mt-2">May 28, 2025</p>
-            </div>
-          </div>
-
-          { /* embedded thing */ }
-          <div className="bg-white border border-[#333333] rounded p-4 mb-4 shadow-sm flex flex-col md:flex-row gap-4">
-            <div className="w-full md:w-1/3">
-              <iframe
-                className="w-full aspect-video rounded"
-                src="https://www.youtube.com/embed/WIVtsf3Fpc4"
-                title="YouTube video"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
-            </div>
-            <div className="flex-1">
-              <h2 className="text-lg font-semibold text-[#333333] mb-2">New Video: There Is No Math</h2>
-              <p className="text-[#333333] text-base leading-relaxed">
-                No, really. There isn&apos;t. I promise.
-              </p>
-              <p className="text-sm text-[#666] mt-2">May 28, 2025</p>
-            </div>
-          </div>
-
+        {/* Eyebrow */}
+        <div
+          className="mb-6 text-sm font-semibold uppercase tracking-[0.12em] text-[#8A8576]"
+          style={{ fontFamily: 'var(--font-body)' }}
+        >
+          Vanilla Sudoku
         </div>
+
+        {/* The line */}
+        <h1
+          className="m-0 text-[clamp(2.75rem,8vw,4.5rem)] font-normal leading-[1.05] tracking-[-0.02em] text-[#333333]"
+          style={{ fontFamily: 'var(--font-display)' }}
+        >
+          Sudoku for the <em className="italic text-[#4A7C97]">curious.</em>
+        </h1>
+
+        {/* The exhale */}
+        <p
+          className="mt-8 max-w-[540px] text-[clamp(1.125rem,2.6vw,1.5rem)] font-light italic leading-[1.55] text-[#5C594F]"
+          style={{ fontFamily: 'var(--font-display)' }}
+        >
+          Tech fatigue is real. Unplug for a little while.
+        </p>
+
+        {/* The invitation */}
+        <p
+          className="mb-6 mt-16 text-lg font-normal leading-[1.7] text-[#5C594F]"
+          style={{ fontFamily: 'var(--font-body)' }}
+        >
+          Pick a puzzle. See where it takes you.
+        </p>
+
+        {/* Primary CTA */}
+        <Link
+          href="/puzzles"
+          className="inline-flex items-center gap-2.5 rounded-md border border-[#6096B4] bg-[#6096B4] px-9 py-4 text-lg font-semibold text-[#EEE9DA] shadow-[0_1px_2px_rgba(43,42,38,0.06)] transition-colors duration-300 ease-out hover:border-[#4A7C97] hover:bg-[#4A7C97] active:translate-y-px active:border-[#3D6B85] active:bg-[#3D6B85]"
+          style={{ fontFamily: 'var(--font-body)' }}
+        >
+          Pick a puzzle
+          <ArrowRight size={18} />
+        </Link>
       </div>
-    </div>
+    </section>
   );
 }
