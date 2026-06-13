@@ -14,8 +14,8 @@
     "generate:candidates:batch": "node tools/pipelineRunner.js --count=10 --batch=1000",
     "generate:screenshots": "node tools/generatePuzzleScreenshots.js",
     "generate:screenshots:single": "node tools/generatePuzzleScreenshots.js --difficulty=easy --id=0001",
-    "generate:social": "node tools/generateSocialCards.js",
-    "generate:social:single": "node tools/generateSocialCards.js --difficulty=hard --id=0002"
+    "generate:social": "node scripts/generate-social-card.mjs",
+    "generate:social:single": "node scripts/generate-social-card.mjs --difficulty=hard --id=0002"
   },
   "dependencies": {
     "clsx": "2.1.1",

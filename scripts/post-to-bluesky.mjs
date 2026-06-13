@@ -53,7 +53,12 @@ if (!password) die('BLUESKY_APP_PASSWORD env var is required (do not paste it on
 
 // ── Resolve assets ────────────────────────────────────────────────────────────
 const cardPath = path.join(PROJECT_ROOT, 'public', 'social', difficulty, `${puzzleId}.png`);
-if (!fs.existsSync(cardPath)) die(`Card image not found: ${cardPath} (run: npm run generate:social:single)`);
+if (!fs.existsSync(cardPath)) {
+  // Skip rather than fail: a missing card must never turn a deploy red. The page
+  // still falls back to its bare-grid preview image; post the card next time.
+  console.warn(`⚠️  Card image not found: ${cardPath} — skipping Bluesky post (nothing to attach).`);
+  process.exit(0);
+}
 
 const difficultyCap = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
 const displayNum = String(parseInt(puzzleId, 10)); // strip leading zeros for display only
