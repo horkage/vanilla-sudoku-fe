@@ -68,8 +68,8 @@ export default function Header() {
                 aria-current={active ? "page" : undefined}
                 className={`rounded-full px-4 py-2 text-sm font-semibold transition-colors duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
                   active
-                    ? "bg-[#E2EDF2] text-[#3D6B85]"
-                    : "text-[#5C594F] hover:bg-[#E2EDF2] hover:text-[#3D6B85]"
+                    ? "bg-[var(--difficulty-medium)] text-[#2B2A26]"
+                    : "text-[#5C594F] hover:bg-[var(--difficulty-medium)] hover:text-[#2B2A26]"
                 }`}
               >
                 {label}

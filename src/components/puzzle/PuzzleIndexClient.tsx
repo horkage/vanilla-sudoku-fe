@@ -6,6 +6,8 @@ import { ArrowRight } from "lucide-react";
 import { PuzzleTumbler, type TumblerPuzzle } from "./PuzzleTumbler";
 import { SudokuBoard } from "./SudokuBoard";
 
+const DIFFICULTIES = ["easy", "medium", "hard"] as const;
+
 const DIFFICULTY_COLOR: Record<string, string> = {
   easy: "var(--difficulty-easy)",
   medium: "var(--difficulty-medium)",
@@ -43,9 +45,6 @@ export default function PuzzleIndexClient({ difficulty, puzzles }: PuzzleIndexCl
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active]);
 
-  const diffLabel = difficulty.charAt(0).toUpperCase() + difficulty.slice(1);
-  const diffColor = DIFFICULTY_COLOR[difficulty] || "var(--teal-500)";
-
   if (puzzles.length === 0) {
     return (
       <div className="mx-auto max-w-[640px] px-7 py-24 text-center">
@@ -65,17 +64,50 @@ export default function PuzzleIndexClient({ difficulty, puzzles }: PuzzleIndexCl
         {/* LEFT — heading + tumbler */}
         <section className="min-w-0">
           <header className="mb-6 max-w-[440px]">
-            <div className="mb-2 inline-flex items-center gap-2">
-              <span
-                className="inline-block h-[9px] w-[9px] rounded-full"
-                style={{ background: diffColor }}
-              />
-              <span
-                className="text-sm font-semibold uppercase tracking-[0.12em] text-[color:var(--ink-400)]"
-                style={{ fontFamily: "var(--font-body)" }}
-              >
-                {diffLabel}
-              </span>
+            <div
+              className="mb-2 flex items-center gap-5"
+              style={{ fontFamily: "var(--font-body)" }}
+            >
+              {DIFFICULTIES.map((d) => {
+                const isActive = d === difficulty;
+                const label = d.charAt(0).toUpperCase() + d.slice(1);
+                const dot = (
+                  <span
+                    className="inline-block h-[9px] w-[9px] rounded-full"
+                    style={
+                      isActive
+                        ? { background: DIFFICULTY_COLOR[d] }
+                        : { border: "1px solid var(--ink-300)" }
+                    }
+                  />
+                );
+                const text = (
+                  <span
+                    className={`text-sm font-semibold uppercase tracking-[0.12em] ${
+                      isActive
+                        ? "text-[color:var(--ink-800)] underline underline-offset-4"
+                        : "text-[color:var(--ink-300)]"
+                    }`}
+                  >
+                    {label}
+                  </span>
+                );
+                return isActive ? (
+                  <span key={d} className="inline-flex items-center gap-2">
+                    {dot}
+                    {text}
+                  </span>
+                ) : (
+                  <Link
+                    key={d}
+                    href={`/puzzles/${d}`}
+                    className="inline-flex items-center gap-2 transition-opacity hover:opacity-70"
+                  >
+                    {dot}
+                    {text}
+                  </Link>
+                );
+              })}
             </div>
             <h1
               className="m-0 text-[3rem] font-normal italic leading-[1.05] tracking-[-0.02em] text-[color:var(--ink-800)]"
